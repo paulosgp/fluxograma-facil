@@ -46,6 +46,15 @@ function coordenadaReta(ini, fim, cA, cB) {
   return (lo + hi) / 2;
 }
 
+// Losango e círculo só aceitam a reta perto do meio do lado (a um quarto da
+// medida, no máximo): mais longe, ela encostaria na aresta inclinada ou na curva,
+// e a seta pareceria sair "de lado". Aí vale a dobra saindo do vértice.
+function retaBoaPara(f, lado, c) {
+  if (f.tipo !== 'losango' && f.tipo !== 'circulo') return true;
+  if (lado === 'cima' || lado === 'baixo') return Math.abs(c - (f.x + f.l / 2)) <= f.l / 4;
+  return Math.abs(c - (f.y + f.a / 2)) <= f.a / 4;
+}
+
 const trocar = ([x, y]) => [y, x];
 
 // Os dois lados no mesmo eixo (horizontal).
@@ -142,14 +151,18 @@ export function tracarSeta(origem, destino, opcoes = {}) {
     const fim = Math.min(a.dir, b.dir);
     if (fim - ini >= SOBREPOSICAO_MIN) {
       const x = coordenadaReta(ini, fim, a.cx, b.cx);
-      pontos = [pontoNaBorda(origem, saida, x), pontoNaBorda(destino, chegada, x)];
+      if (retaBoaPara(origem, saida, x) && retaBoaPara(destino, chegada, x)) {
+        pontos = [pontoNaBorda(origem, saida, x), pontoNaBorda(destino, chegada, x)];
+      }
     }
   } else if (horizontal) {
     const ini = Math.max(a.topo, b.topo);
     const fim = Math.min(a.base, b.base);
     if (fim - ini >= SOBREPOSICAO_MIN) {
       const y = coordenadaReta(ini, fim, a.cy, b.cy);
-      pontos = [pontoNaBorda(origem, saida, y), pontoNaBorda(destino, chegada, y)];
+      if (retaBoaPara(origem, saida, y) && retaBoaPara(destino, chegada, y)) {
+        pontos = [pontoNaBorda(origem, saida, y), pontoNaBorda(destino, chegada, y)];
+      }
     }
   }
   if (!pontos) pontos = rota(pontoNaBorda(origem, saida), saida, pontoNaBorda(destino, chegada), chegada);

@@ -46,6 +46,16 @@ test('chegada no círculo encosta na curva, não na caixa', () => {
   assert.equal(s.pontos[1][1], 104.2);
 });
 
+test('losango com pouca sobreposição: sai pelo vértice e dobra, não pela aresta inclinada', () => {
+  const L = r(250, 190, 160, 110, 'losango'), R = r(450, 280, 314, 60, 'arredondado');
+  assert.deepEqual(tracarSeta(L, R).pontos, [[410, 245], [430, 245], [430, 310], [450, 310]]);
+});
+
+test('círculo encostado longe do meio: chega pelo ponto do meio, com dobra', () => {
+  const s = tracarSeta(r(0, 0, 100, 40), r(60, 100, 100, 100, 'circulo'));
+  assert.deepEqual(s.pontos, [[50, 40], [50, 70], [110, 70], [110, 100]]);
+});
+
 test('caminho SVG e encurtar o fim para caber a ponta', () => {
   assert.equal(caminhoSvg([[0, 0], [10, 0], [10, 20]]), 'M0 0 L10 0 L10 20');
   assert.deepEqual(encurtarFim([[0, 0], [0, 100]], 8), [[0, 0], [0, 92]]);
