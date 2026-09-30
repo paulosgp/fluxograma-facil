@@ -254,5 +254,7 @@ redireciona sozinho (301) para o endereço novo.
     antigo redireciona para um endereço que não responde, e o site sai do ar.
   - **O Registro.br pede login do Paulo,** e senha é algo que o Claude não digita.
 - **O espelho `apps`:** o app está no monorepo desde 29/09/2026 (entrou no `PREFIX_MAP` do gancho).
+- **Guia Saúde:** tem cartão lá desde 30/09/2026, no fim de "Sistemas", para "Coordenação e
+  enfermeiros". As decisões estão no `CLAUDE.md` do Guia Saúde.
 - **O que vai a público:** o repositório inteiro, inclusive `docs/` e este arquivo. Não há dado
   pessoal nem de paciente em lugar nenhum; mantenha assim.
