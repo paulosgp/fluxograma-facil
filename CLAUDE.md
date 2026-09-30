@@ -137,6 +137,8 @@ raiz). Módulos ES não carregam com o `index.html` aberto direto do disco, e po
   modelo próprio para a folha deitada.
 - **O botão "Ajuda" deu lugar ao "Tire sua dúvida"** (29/09/2026). O passo a passo que ficava nele
   virou a resposta "Como usar o sistema, do começo ao fim?".
+- **Nada é guardado enquanto a tela inicial está aberta.** O `beforeunload` guarda ao sair. Sem essa
+  trava, quem recarregava ainda na tela inicial gravava a folha vazia e nunca mais via a tela inicial.
 - **O aviso da barra é só "✓ Guardado".** A frase inteira fica no `title`. Com "Guardado neste
   computador", a barra quebrava em duas linhas num notebook de 1366 px e roubava altura da folha.
 

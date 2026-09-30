@@ -105,6 +105,10 @@ function marcarGuardado() {
 }
 function guardar() {
   clearTimeout(relogioGuardar);
+  // Com a tela inicial aberta, a pessoa ainda não escolheu nada: guardar agora (o
+  // beforeunload chama isto) gravaria a folha vazia, e a tela inicial sumiria na
+  // próxima visita.
+  if (!$('inicio').hidden) return;
   if (guardarNoNavegador(loja.doc)) { marcarGuardado(); return; }
   const s = $('status');
   s.classList.add('ruim');
