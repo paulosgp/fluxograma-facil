@@ -1,0 +1,208 @@
+/* Fluxograma Fácil — aparência da tela e da impressão.
+   Público: gente com dificuldade no computador. Por isso botões grandes, com
+   desenho E nome, letra de 15 px para cima, e nada que apareça só ao passar o mouse. */
+
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 600 700; font-display: block;
+  src: url(fontes/archivo-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Source Sans 3'; font-style: normal; font-weight: 400 600; font-display: block;
+  src: url(fontes/sourcesans3-latin.woff2) format('woff2'); }
+
+:root {
+  --azul: #1a5fb4; --azul-claro: #e3edfb; --azul-forte: #134a8e;
+  --texto: #1f2328; --texto-2: #57606a; --linha: #d0d7de; --fundo: #f3f5f8; --palco: #e4e8ee;
+  --perigo: #b42318; --aviso: #fff4ce; --ok: #1a7f37;
+  --zoom: 1;
+  font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+  color: var(--texto);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { display: flex; flex-direction: column; background: var(--fundo); font-size: 16px; overflow: hidden; }
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+/* ---------- Barra do alto ---------- */
+.barra { display: flex; align-items: center; gap: 12px; padding: 8px 14px; background: #fff;
+  border-bottom: 1px solid var(--linha); flex-wrap: wrap; }
+.marca { display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-weight: 700;
+  font-size: 18px; color: var(--azul-forte); white-space: nowrap; }
+.marca svg { width: 28px; height: 28px; }
+.barra-botoes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.separador { width: 1px; height: 28px; background: var(--linha); margin: 0 4px; }
+.bt { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 12px;
+  border: 1px solid var(--linha); border-radius: 8px; background: #fff; cursor: pointer; font-size: 15px; }
+.bt svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; }
+.bt:hover { background: var(--azul-claro); border-color: var(--azul); }
+.bt:disabled { opacity: .4; cursor: default; background: #fff; border-color: var(--linha); }
+.bt-destaque { background: var(--azul); border-color: var(--azul); color: #fff; }
+.bt-destaque:hover { background: var(--azul-forte); }
+.status { margin-left: auto; font-size: 14px; color: var(--ok); white-space: nowrap; }
+.status.ruim { color: var(--perigo); }
+
+.faixa { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 10px 16px;
+  background: #fde68a; font-size: 18px; font-weight: 600; }
+.aviso { padding: 10px 16px; background: var(--aviso); border-bottom: 1px solid #e3c567; font-size: 16px; text-align: center; }
+.aviso-tela { display: none; }
+
+/* ---------- Área de trabalho ---------- */
+.area { flex: 1; min-height: 0; display: grid; grid-template-columns: 150px minmax(0, 1fr) 260px; }
+
+.paleta { background: #fff; border-right: 1px solid var(--linha); padding: 12px 10px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px; }
+.paleta h2, .painel h2 { margin: 0 0 4px; font-size: 14px; font-weight: 600; color: var(--texto-2);
+  text-transform: uppercase; letter-spacing: .04em; }
+.paleta hr { width: 100%; border: 0; border-top: 1px solid var(--linha); margin: 6px 0; }
+.bt-forma { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px;
+  border: 1px solid var(--linha); border-radius: 10px; background: #fff; cursor: pointer; font-size: 15px; }
+.bt-forma svg { width: 44px; height: 30px; fill: #fff; stroke: #3d4650; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; }
+.bt-forma:hover { background: var(--azul-claro); border-color: var(--azul); }
+.bt-forma.ativo { background: #fde68a; border-color: #b7791f; }
+
+.palco { overflow: auto; background: var(--palco); padding: 24px; }
+.folha-caixa { position: relative; margin: 0 auto; }
+
+.folha { position: absolute; left: 0; top: 0; background: #fff; transform-origin: 0 0;
+  transform: scale(var(--zoom)); box-shadow: 0 2px 10px rgba(0, 0, 0, .18); overflow: hidden; }
+.folha.retrato { width: 794px; height: 1123px; }
+.folha.paisagem { width: 1123px; height: 794px; }
+.folha.com-grade { background-image:
+  linear-gradient(to right, rgba(0, 0, 0, .045) 1px, transparent 1px),
+  linear-gradient(to bottom, rgba(0, 0, 0, .045) 1px, transparent 1px);
+  background-size: 20px 20px; }
+.folha::after { content: ''; position: absolute; inset: 30px; border: 1px dashed rgba(0, 0, 0, .12);
+  pointer-events: none; }
+
+.camada-setas, .camada-formas, .camada-rotulos, .camada-controles { position: absolute; inset: 0; }
+.camada-setas { overflow: visible; pointer-events: none; }
+.camada-formas, .camada-rotulos, .camada-controles { pointer-events: none; }
+
+/* ---------- Formas ---------- */
+.forma { position: absolute; pointer-events: auto; cursor: pointer; }
+.forma .contorno { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.texto-caixa { position: absolute; display: flex; align-items: center; justify-content: center; }
+.texto { width: 100%; outline: none; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.25;
+  color: #1d1d1d; text-align: center; cursor: text; min-height: 1.25em; }
+.forma.esquerda .texto { text-align: left; }
+.forma.negrito .texto { font-weight: 600; }
+.forma.vazia:not(.editando) .texto-caixa::after { content: 'Clique e escreva'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; text-align: center; color: #8a9099;
+  font-size: 13px; pointer-events: none; }
+.forma.tipo-texto:not(.selecionada):not(.editando):not(.fora) { outline: 1px dashed #c3c9d0; }
+.forma.selecionada { outline: 2px dashed var(--azul); outline-offset: 5px; }
+.forma.editando { outline: 2px solid var(--azul); outline-offset: 5px; }
+.forma.fora { outline: 3px solid var(--perigo); outline-offset: 3px; }
+.folha.arrastando .forma { cursor: grabbing; }
+.folha.modo-seta .forma { cursor: crosshair; }
+.folha.modo-seta .forma:hover { outline: 3px solid #f59e0b; outline-offset: 4px; }
+.forma.origem-seta { outline: 3px solid #d97706; outline-offset: 4px; }
+
+/* ---------- Título ---------- */
+.titulo { position: absolute; left: 30px; right: 30px; top: 30px; min-height: 50px; padding: 8px 18px;
+  display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px solid;
+  cursor: text; }
+.titulo-texto { width: 100%; outline: none; text-align: center; font-family: 'Archivo', sans-serif;
+  font-weight: 700; font-size: 22px; line-height: 1.2; color: #1d1d1d; }
+.titulo.vazio .titulo-texto::before { content: 'Clique e escreva o título'; color: #8a9099; font-weight: 600; }
+.titulo.selecionado { outline: 2px solid var(--azul); outline-offset: 4px; }
+
+/* ---------- Setas ---------- */
+.seta-alvo { fill: none; stroke: #000; stroke-opacity: 0; stroke-width: 16; pointer-events: stroke; cursor: pointer; }
+.seta-linha { fill: none; stroke: #2b2f33; stroke-width: 2; }
+.seta.selecionada .seta-linha { stroke: var(--azul); stroke-width: 3; }
+.rotulo { position: absolute; transform: translate(-50%, -50%); padding: 0 4px; background: #fff; border-radius: 3px;
+  font-weight: 600; font-size: 13px; line-height: 1.3; white-space: nowrap; pointer-events: auto; cursor: pointer; }
+.rotulo.selecionado { color: var(--azul); outline: 2px solid var(--azul); }
+
+/* ---------- Controles (tamanho constante na tela, qualquer que seja o zoom) ---------- */
+.ctl-mais, .ctl-alca { position: absolute; pointer-events: auto;
+  transform: translate(-50%, -50%) scale(calc(1 / var(--zoom))); }
+.ctl-mais { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; background: var(--azul);
+  color: #fff; font-size: 22px; line-height: 25px; text-align: center; cursor: pointer; padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .3); }
+.ctl-mais:hover { background: var(--azul-forte); }
+.ctl-alca { width: 16px; height: 16px; background: #fff; border: 3px solid var(--azul); border-radius: 3px; }
+.ctl-alca[data-canto='no'], .ctl-alca[data-canto='se'] { cursor: nwse-resize; }
+.ctl-alca[data-canto='ne'], .ctl-alca[data-canto='so'] { cursor: nesw-resize; }
+.guia { position: absolute; background: #e8590c; pointer-events: none; }
+.laco { position: absolute; border: 1px dashed var(--azul); background: rgba(26, 95, 180, .08); pointer-events: none; }
+
+/* ---------- Painel da direita ---------- */
+.painel { background: #fff; border-left: 1px solid var(--linha); padding: 14px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 16px; font-size: 15px; }
+.painel .dica { color: var(--texto-2); line-height: 1.5; margin: 0; }
+.painel .grupo { display: flex; flex-direction: column; gap: 6px; }
+.painel .rotulo-grupo { font-weight: 600; }
+.painel .linha { display: flex; gap: 6px; flex-wrap: wrap; }
+.cores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.cor { height: 36px; border-radius: 8px; border: 2px solid; cursor: pointer; font-size: 13px; }
+.cor.ativo { box-shadow: 0 0 0 3px var(--azul); }
+.opcao { min-height: 38px; padding: 4px 10px; border: 1px solid var(--linha); border-radius: 8px;
+  background: #fff; cursor: pointer; font-size: 15px; }
+.opcao:hover { border-color: var(--azul); background: var(--azul-claro); }
+.opcao.ativo { border: 2px solid var(--azul); background: var(--azul-claro); font-weight: 600; }
+.opcao svg { width: 30px; height: 22px; fill: #fff; stroke: #3d4650; stroke-width: 2; vertical-align: middle; }
+.opcao.perigo { color: var(--perigo); border-color: #f1b5ae; }
+.opcao.perigo:hover { background: #fdecea; }
+.painel input[type='text'] { width: 100%; min-height: 38px; padding: 4px 8px; border: 1px solid var(--linha);
+  border-radius: 8px; font: inherit; }
+.painel .alerta { background: #fdecea; color: var(--perigo); padding: 8px 10px; border-radius: 8px; line-height: 1.4; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Coberturas: tela inicial e diálogos ---------- */
+.cobertura { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+  background: rgba(20, 28, 38, .5); padding: 16px; }
+.cartao { background: #fff; border-radius: 16px; padding: 28px; max-width: 760px; width: 100%;
+  max-height: 100%; overflow: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, .3); }
+.cartao h1 { margin: 0 0 6px; font-family: 'Archivo', sans-serif; font-size: 28px; color: var(--azul-forte); }
+.cartao h2 { margin: 0 0 12px; font-family: 'Archivo', sans-serif; font-size: 22px; }
+.cartao p { margin: 0 0 18px; font-size: 17px; line-height: 1.5; color: var(--texto-2); }
+.escolhas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.escolha { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px; text-align: center;
+  border: 2px solid var(--linha); border-radius: 14px; background: #fff; cursor: pointer; }
+.escolha:hover { border-color: var(--azul); background: var(--azul-claro); }
+.escolha svg { width: 110px; height: 136px; }
+.escolha strong { font-size: 19px; }
+.escolha span { color: var(--texto-2); font-size: 15px; line-height: 1.4; }
+.bt-link { background: none; border: 0; color: var(--azul); text-decoration: underline; cursor: pointer;
+  font-size: 16px; padding: 6px 0; }
+.cartao-dialogo { max-width: 560px; }
+.dialogo-corpo { font-size: 17px; line-height: 1.5; margin-bottom: 20px; }
+.dialogo-corpo ol { padding-left: 22px; margin: 0; }
+.dialogo-corpo li { margin-bottom: 10px; }
+.dialogo-botoes { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.dialogo-botoes .bt { min-height: 44px; font-size: 16px; }
+
+/* ---------- Tela estreita ---------- */
+@media (max-width: 899px) {
+  body { overflow: auto; }
+  .aviso-tela { display: block; padding: 10px 16px; background: var(--aviso); text-align: center; }
+  .area { display: flex; flex-direction: column; }
+  .paleta { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--linha); }
+  .paleta h2, .paleta hr { display: none; }
+  .bt-forma { min-width: 96px; }
+  .palco { min-height: 70vh; padding: 12px; }
+  .painel { border-left: 0; border-top: 1px solid var(--linha); }
+  .escolhas { grid-template-columns: 1fr; }
+}
+
+/* ---------- Impressão: só a folha, em tamanho real ---------- */
+@media print {
+  html, body { height: auto; overflow: visible; background: #fff; display: block; }
+  .barra, .faixa, .aviso, .aviso-tela, .paleta, .painel, .cobertura, .camada-controles { display: none !important; }
+  .area { display: block; }
+  .palco { overflow: visible; padding: 0; background: none; }
+  .folha-caixa { width: auto !important; height: auto !important; margin: 0; }
+  .folha { position: relative; transform: none !important; box-shadow: none; background: #fff !important; }
+  .folha::after { display: none; }
+  /* 1 mm a menos que o papel: evita a folha em branco a mais que alguns navegadores soltam por arredondamento */
+  .folha.retrato { width: 210mm; height: 296mm; }
+  .folha.paisagem { width: 297mm; height: 209mm; }
+  .forma, .titulo { outline: none !important; }
+  .forma.vazia .texto-caixa::after, .titulo.vazio .titulo-texto::before { content: none !important; }
+  .titulo.vazio { visibility: hidden; }
+  .seta.selecionada .seta-linha { stroke: #2b2f33; stroke-width: 2; }
+  .rotulo.selecionado { color: inherit; outline: none; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}

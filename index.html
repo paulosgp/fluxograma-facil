@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluxograma Fácil</title>
+<meta name="description" content="Monte o fluxograma do seu município de um jeito fácil: formas, setas e texto, pronto para imprimir.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a5fb4'/%3E%3Cpath d='M16 5l7 7-7 7-7-7z' fill='%23fff'/%3E%3Cpath d='M16 19v6m-3-3 3 3 3-3' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="preload" href="fontes/sourcesans3-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fontes/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="estilo.css">
+<style id="estilo-pagina">@page { size: A4 portrait; margin: 0; }</style>
+</head>
+<body>
+<header class="barra">
+  <div class="marca">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1a5fb4"/><path d="M16 5l7 7-7 7-7-7z" fill="#fff"/><path d="M16 19v6m-3-3 3 3 3-3" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    <span>Fluxograma Fácil</span>
+  </div>
+  <div class="barra-botoes">
+    <button id="bt-desfazer" class="bt" title="Desfazer (Ctrl+Z)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button>
+    <button id="bt-refazer" class="bt" title="Refazer (Ctrl+Y)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5M20 9H10a6 6 0 0 0 0 12h3"/></svg>Refazer</button>
+    <span class="separador"></span>
+    <button id="bt-salvar" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg>Salvar no computador</button>
+    <button id="bt-abrir" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3zM3 7V5h6"/></svg>Abrir</button>
+    <button id="bt-imprimir" class="bt bt-destaque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>Imprimir ou PDF</button>
+    <span class="separador"></span>
+    <button id="bt-novo" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM12 11v6m-3-3h6"/></svg>Começar outro</button>
+    <button id="bt-ajuda" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>Ajuda</button>
+  </div>
+  <div id="status" class="status" role="status"></div>
+  <input type="file" id="entrada-arquivo" accept=".json,application/json" hidden>
+</header>
+
+<div id="faixa" class="faixa" hidden>
+  <span id="faixa-texto"></span>
+  <button id="faixa-cancelar" class="bt">Cancelar</button>
+</div>
+<div id="aviso" class="aviso" role="alert" hidden></div>
+<div class="aviso-tela">Para montar o fluxograma, use um computador. Aqui dá para ver e imprimir.</div>
+
+<main class="area">
+  <nav class="paleta" aria-label="Pôr na folha">
+    <h2>Pôr na folha</h2>
+    <button class="bt-forma" data-tipo="retangulo"><svg viewBox="0 0 40 28" aria-hidden="true"><rect x="3" y="4" width="34" height="20"/></svg><span>Retângulo</span></button>
+    <button class="bt-forma" data-tipo="arredondado"><svg viewBox="0 0 40 28" aria-hidden="true"><rect x="3" y="4" width="34" height="20" rx="7"/></svg><span>Arredondado</span></button>
+    <button class="bt-forma" data-tipo="losango"><svg viewBox="0 0 40 28" aria-hidden="true"><path d="M20 2 38 14 20 26 2 14z"/></svg><span>Losango</span></button>
+    <button class="bt-forma" data-tipo="circulo"><svg viewBox="0 0 40 28" aria-hidden="true"><ellipse cx="20" cy="14" rx="16" ry="11"/></svg><span>Círculo</span></button>
+    <button class="bt-forma" data-tipo="texto"><svg viewBox="0 0 40 28" aria-hidden="true"><path d="M11 7h18M20 7v15"/></svg><span>Texto</span></button>
+    <button class="bt-forma" id="bt-seta"><svg viewBox="0 0 40 28" aria-hidden="true"><path d="M4 14h30m-7-7 7 7-7 7"/></svg><span>Seta</span></button>
+    <hr>
+    <button class="bt-forma" id="bt-folha"><svg viewBox="0 0 40 28" aria-hidden="true"><rect x="8" y="2" width="24" height="24" rx="2"/><path d="M13 20l7-7 7 7"/></svg><span id="bt-folha-texto">Deitar a folha</span></button>
+  </nav>
+
+  <section class="palco" id="palco">
+    <div class="folha-caixa" id="folha-caixa">
+      <div class="folha retrato com-grade" id="folha">
+        <svg class="camada-setas" id="camada-setas" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="titulo" id="titulo"><div class="titulo-texto" id="titulo-texto" spellcheck="true"></div></div>
+        <div class="camada-formas" id="camada-formas"></div>
+        <div class="camada-rotulos" id="camada-rotulos"></div>
+        <div class="camada-controles" id="camada-controles"></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="painel" id="painel" aria-label="Forma escolhida"></aside>
+</main>
+
+<div id="inicio" class="cobertura" hidden>
+  <div class="cartao cartao-inicio">
+    <h1>Fluxograma Fácil</h1>
+    <p>Monte o fluxograma do seu município: formas, setas e texto, pronto para imprimir.</p>
+    <div class="escolhas">
+      <button id="ini-modelo" class="escolha">
+        <svg viewBox="0 0 120 150" aria-hidden="true"><rect x="10" y="6" width="100" height="12" rx="3" fill="#F8D3E1" stroke="#C2507A"/><path d="M60 26l14 9-14 9-14-9z" fill="#fff" stroke="#5F6368"/><path d="M60 56l14 9-14 9-14-9z" fill="#F9CFCF" stroke="#C43D3D"/><path d="M60 86l14 9-14 9-14-9z" fill="#FFF1BF" stroke="#C79A00"/><rect x="82" y="58" width="30" height="16" rx="3" fill="#F9CFCF" stroke="#C43D3D"/><rect x="82" y="88" width="30" height="16" rx="3" fill="#FFF1BF" stroke="#C79A00"/><rect x="8" y="30" width="28" height="50" rx="3" fill="#fff" stroke="#5F6368" stroke-dasharray="3 2"/><rect x="46" y="116" width="66" height="26" rx="3" fill="#D6E6F7" stroke="#3B78B8"/></svg>
+        <strong>Começar com o modelo</strong>
+        <span>As formas já vêm no lugar, em branco. É só escrever.</span>
+      </button>
+      <button id="ini-vazia" class="escolha">
+        <svg viewBox="0 0 120 150" aria-hidden="true"><rect x="10" y="6" width="100" height="12" rx="3" fill="#ECEFF1" stroke="#78909C"/><rect x="10" y="26" width="100" height="118" rx="3" fill="#fff" stroke="#c7ccd1" stroke-dasharray="4 3"/></svg>
+        <strong>Começar com a folha vazia</strong>
+        <span>Só o título. Você põe as formas que quiser.</span>
+      </button>
+    </div>
+    <button id="ini-abrir" class="bt-link">Abrir um fluxograma salvo no computador</button>
+    <button id="ini-voltar" class="bt-link" hidden>Voltar para o fluxograma que estava aberto</button>
+  </div>
+</div>
+
+<div id="dialogo" class="cobertura" hidden>
+  <div class="cartao cartao-dialogo" role="dialog" aria-modal="true" aria-labelledby="dialogo-titulo">
+    <h2 id="dialogo-titulo"></h2>
+    <div id="dialogo-corpo" class="dialogo-corpo"></div>
+    <div id="dialogo-botoes" class="dialogo-botoes"></div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
