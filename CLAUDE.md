@@ -229,22 +229,29 @@ Playwright).
 
 ## Publicação
 
-**No ar desde 29/09/2026 em `https://paulosgp.github.io/fluxograma-facil/`** (GitHub Pages).
+**No ar em `https://fluxograma.guiaaps.com.br`** desde 30/09/2026, no GitHub Pages com domínio
+próprio e HTTPS obrigatório. De 29 a 30/09 esteve em `paulosgp.github.io/fluxograma-facil`, que agora
+redireciona sozinho (301) para o endereço novo.
+
+- **O domínio.** O CNAME `fluxograma` → `paulosgp.github.io.` foi criado em 30/09/2026 na zona do
+  `guiaaps.com.br` no Registro.br, pelo Claude in Chrome, com o Paulo logado e o "pode criar" dele.
+  A zona fica no **modo avançado**. As outras entradas (4 A do site principal, `www`, e os CNAME da
+  Vercel do documentos, encaminha e planifica) não foram tocadas.
+  - **A ordem seguida:** primeiro o DNS; depois o arquivo `CNAME` e a API do Pages (`cname`); por
+    último `https_enforced` com o certificado já `approved`, que saiu em poucos minutos.
+  - **Armadilha:** a página do domínio no Registro.br tem **dois** botões "Salvar alterações". O da
+    zona DNS fica logo abaixo da tabela, ao lado de Cancelar. O outro é o dos contatos.
+- **O `localStorage` é por endereço.** O que alguém fez no link antigo não aparece no novo. Em 30/09
+  isso não afetou ninguém, porque só o Paulo tinha testado. **Se o endereço mudar de novo com gente
+  usando,** antes é preciso pedir a todos "Salvar no computador", para depois "Abrir" no endereço novo.
 
 - **Repositório:** `paulosgp/fluxograma-facil`, **público** (o Pages gratuito só serve repositório
   público), branch `master`, publicado a partir da raiz. O Paulo autorizou ("Publicar agora").
 - **Publicar = commit + `git push`.** O Pages atualiza em 1–2 min, e não há passo de montagem.
-- **Endereço próprio: `fluxograma.guiaaps.com.br`,** escolhido pelo Paulo em 30/09/2026. É o domínio
-  neutro "Guia APS", onde já estão o Planifica e o Protocolos, e combina com um sistema da Regional
-  inteira. O manual e o roteiro já usam esse endereço.
-  - **Ordem obrigatória:**
-    1. primeiro o CNAME `fluxograma` → `paulosgp.github.io`, na zona do `guiaaps.com.br` no
-       Registro.br;
-    2. **só depois** o arquivo `CNAME` e o domínio no Pages (API
-       `PUT repos/paulosgp/fluxograma-facil/pages` com `cname`);
-    3. por último o HTTPS obrigatório, quando o certificado sair.
-  - **Por que a ordem:** com o domínio ligado no Pages antes de o DNS existir, o link antigo
-    redireciona para um endereço que não responde, e o site sai do ar.
+- **Por que `guiaaps.com.br`:** foi escolha do Paulo em 30/09/2026. É o domínio neutro "Guia APS",
+  onde já estão o Planifica e o Protocolos, e combina com um sistema da Regional inteira.
+  - **Por que a ordem DNS → Pages:** com o domínio ligado no Pages antes de o DNS existir, o link
+    antigo redireciona para um endereço que não responde, e o site sai do ar.
   - **O Registro.br pede login do Paulo,** e senha é algo que o Claude não digita.
 - **O espelho `apps`:** o app está no monorepo desde 29/09/2026 (entrou no `PREFIX_MAP` do gancho).
 - **O que vai a público:** o repositório inteiro, inclusive `docs/` e este arquivo. Não há dado
