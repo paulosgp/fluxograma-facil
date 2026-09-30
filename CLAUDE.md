@@ -70,8 +70,11 @@ js/arquivo.js     validar/consertar arquivo, nome do arquivo, guardar, baixar, a
 js/desenho.js     desenha na folha (só reflete, não decide)
 js/interacao.js   mouse e teclado: escrever, mover, alças, laço, "+", modo seta
 js/painel.js      painel da direita
+js/busca.js       motor do "Tire sua dúvida" (puro) — ver a seção própria
+js/duvidas.js     a BASE do "Tire sua dúvida": perguntas, jeitos de perguntar, passos
+js/duvidas-tela.js a janela do "Tire sua dúvida"
 js/app.js         liga tudo: barra, tela inicial, diálogos, guardado automático, impressão
-testes/           node --test  (61 testes, só dos módulos puros)
+testes/           node --test  (158 testes, só dos módulos puros)
 servir.js         servidor da prévia: node servir.js → http://localhost:5180
 fontes/           Archivo e Source Sans 3, copiadas do Guia Saúde
 ```
@@ -132,7 +135,56 @@ raiz). Módulos ES não carregam com o `index.html` aberto direto do disco, e po
 - **Deitar a folha com o modelo amontoa as formas embaixo.** O modelo foi desenhado em pé, e virar
   só traz para dentro o que ficaria de fora. O Desfazer resolve. Se o Paulo pedir, dá para fazer um
   modelo próprio para a folha deitada.
-- **A Ajuda ficou só com texto.** O desenho previa um desenho pequeno em cada um dos seis passos.
+- **O botão "Ajuda" deu lugar ao "Tire sua dúvida"** (29/09/2026). O passo a passo que ficava nele
+  virou a resposta "Como usar o sistema, do começo ao fim?".
+- **O aviso da barra é só "✓ Guardado".** A frase inteira fica no `title`. Com "Guardado neste
+  computador", a barra quebrava em duas linhas num notebook de 1366 px e roubava altura da folha.
+
+## Tire sua dúvida (29/09/2026)
+
+Pedido do Paulo: *"Tem como colocar um botão onde a pessoa que tem dificuldade e tem alguma dúvida,
+ela digita ali a dúvida e o sistema avisa como ela deve fazer?"*. Ele escolheu a **busca sem IA**,
+pelo mesmo motivo do Organograma e do Protocolos Institucionais: custo zero, nada de servidor nem
+de chave, e nenhuma cota que um estranho possa gastar pelo link público. Desenho em
+`docs/superpowers/specs/2026-09-29-tire-sua-duvida-design.md`.
+
+- **O que a pessoa vê:**
+  - escreve a dúvida do jeito dela e recebe a resposta em passos numerados, mais "Talvez você
+    queira saber" com até duas parecidas;
+  - com o campo vazio, ou quando a busca não entende, aparecem as perguntas mais comuns
+    (`COMUNS`);
+  - **"Mostrar na tela"** fecha a janela e faz o botão certo **piscar** em laranja (classe
+    `.piscando`, que força `opacity: 1` porque o Desfazer desligado é semitransparente). É o recurso
+    que mais ajuda quem tem dificuldade.
+- **O motor (`busca.js`)** é adaptado do `busca.js` do Organograma da Saúde:
+  - tira acento;
+  - ignora palavras vazias;
+  - entende plural;
+  - perdoa erro de digitação;
+  - e uma frase conhecida inteira na pergunta vale mais que palavras soltas.
+
+  Duas regras novas saíram dos erros das frases de teste:
+  - **termo com "sim" ou "não" só vale como frase inteira.** Palavra por palavra, "não consigo
+    mover" viraria "mover", e "não na seta" viraria "seta";
+  - **frase de várias palavras com uma só de conteúdo também só vale inteira.** "Mais uma caixa"
+    virava "caixa" e respondia qualquer dúvida sobre caixas. Palavra solta ("negrito",
+    "desfazer") continua tolerando plural e erro.
+
+  Dentro de frase inteira, "sim" e "não" contam no peso. Por isso "escrevo sim" ganha de
+  "escrevo".
+- **A base (`duvidas.js`)** tem 43 perguntas **sobre o uso do sistema; nada clínico**. **É na base
+  que se ensina, não no motor.** Quando uma pergunta cair na resposta errada:
+  1. acrescente frases com **duas palavras de conteúdo** nos `termos` do item certo;
+  2. acrescente um caso em `testes/duvidas.test.js`.
+
+  Cuidado com palavra solta que fica a uma letra de uma palavra comum: "grade" pegava "grave", e
+  "gravar" pegava "grave", o que fazia "dengue grave" cair em "salvar".
+- **Os testes:**
+  - `testes/duvidas.test.js` tem 85 frases do jeito que as pessoas escrevem, cada uma com a
+    resposta esperada, mais três perguntas fora do assunto que têm de ficar sem resposta;
+  - todo `mostrar` tem de existir no `index.html`.
+- **Limite conhecido:** como nada sai do computador, não há como saber o que as pessoas perguntaram.
+  A lista melhora com o que o Paulo for contando.
 
 ## Armadilha para testar
 
