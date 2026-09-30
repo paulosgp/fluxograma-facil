@@ -199,6 +199,34 @@ Pelo painel de navegador do app, a digitação "type" injeta texto sem gerar tec
 "digitar com a forma escolhida" só pode ser testado com teclas de verdade (a ação "key" ou o
 Playwright).
 
+## A marca do autor, o manual e o roteiro (30/09/2026)
+
+- **Marca.** O Paulo pediu *"registra a minha marca... Sistema criado por Enf. Paulo Gomes, contato:
+  paulosergiogp@hotmail.com ou algo melhor"*. Ficou assim: "Criado por **Enf. Paulo Gomes** · São
+  Mateus do Sul – PR / Dúvidas, sugestões ou problemas: e-mail". A linha virou também um canal de
+  retorno, que a busca sem servidor não tem.
+  - **Onde aparece:** na tela inicial, no pé do painel da direita e no "Tire sua dúvida" (a pergunta
+    `quem-fez`, com botão de e-mail), além do `<meta name="author">`.
+  - **Fonte única:** `js/creditos.js`. Para trocar o e-mail ou o nome, mude lá. O `manual.html` e o
+    roteiro têm o texto escrito à mão e precisam ser mudados junto, e depois gera-se o PDF de novo.
+  - **O fluxograma IMPRESSO não leva a marca, de propósito:** ele é o documento oficial de cada
+    município.
+  - O e-mail foi usado exatamente como o Paulo escreveu. O e-mail da conta dele é outro, do Gmail.
+- **Manual.** Está em `manual.html` (a página no site) e em `manual.pdf`, gerado dela pelo
+  Playwright (`page.pdf`, A4, 7 páginas). As figuras ficam em `manual/*.png`, capturadas com
+  `deviceScaleFactor: 2`. Há link na tela inicial, no rodapé do "Tire sua dúvida" e na resposta
+  `manual`. Uma cópia do PDF está em `ESF/CURSOS E CAPACITAÇÕES/PLANO DE CONTIGENCIA - DENGUE`.
+  Lições da paginação:
+  - capture o conteúdo do painel e da paleta, não a coluna inteira, que tem um vazio embaixo;
+  - a paleta sai melhor em linha, capturada na tela estreita;
+  - não force quebra de página: `break-inside: avoid` nos blocos basta.
+- **Roteiro de apresentação.** Fica em `docs/apresentacao/roteiro.html`, com PDF de 2 páginas na
+  mesma pasta do plano de contingência. Não tem link no site: é para o Paulo apresentar. Tem "Faça /
+  Fale" para cada passo da demonstração e as perguntas que costumam aparecer.
+- **Tela estreita consertada.** Com menos de 900 px, a área de trabalho ficava presa na altura da
+  janela e a paleta encolhia até sumir. Apareceu ao capturar a figura da paleta. Agora a área cresce
+  com o conteúdo e a página rola.
+
 ## Publicação
 
 **No ar desde 29/09/2026 em `https://paulosgp.github.io/fluxograma-facil/`** (GitHub Pages).
@@ -206,8 +234,18 @@ Playwright).
 - **Repositório:** `paulosgp/fluxograma-facil`, **público** (o Pages gratuito só serve repositório
   público), branch `master`, publicado a partir da raiz. O Paulo autorizou ("Publicar agora").
 - **Publicar = commit + `git push`.** O Pages atualiza em 1–2 min, e não há passo de montagem.
-- **Endereço próprio:** ainda nenhum. Como o sistema serve a Regional inteira, talvez não fique no
-  domínio de São Mateus. A decisão é do Paulo.
+- **Endereço próprio: `fluxograma.guiaaps.com.br`,** escolhido pelo Paulo em 30/09/2026. É o domínio
+  neutro "Guia APS", onde já estão o Planifica e o Protocolos, e combina com um sistema da Regional
+  inteira. O manual e o roteiro já usam esse endereço.
+  - **Ordem obrigatória:**
+    1. primeiro o CNAME `fluxograma` → `paulosgp.github.io`, na zona do `guiaaps.com.br` no
+       Registro.br;
+    2. **só depois** o arquivo `CNAME` e o domínio no Pages (API
+       `PUT repos/paulosgp/fluxograma-facil/pages` com `cname`);
+    3. por último o HTTPS obrigatório, quando o certificado sair.
+  - **Por que a ordem:** com o domínio ligado no Pages antes de o DNS existir, o link antigo
+    redireciona para um endereço que não responde, e o site sai do ar.
+  - **O Registro.br pede login do Paulo,** e senha é algo que o Claude não digita.
 - **O espelho `apps`:** o app está no monorepo desde 29/09/2026 (entrou no `PREFIX_MAP` do gancho).
 - **O que vai a público:** o repositório inteiro, inclusive `docs/` e este arquivo. Não há dado
   pessoal nem de paciente em lugar nenhum; mantenha assim.
