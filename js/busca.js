@@ -102,12 +102,22 @@ function notaTermo(qNorm, qPalavras, termo) {
   const tNorm = normalizar(termo);
   if (!tNorm) return 0;
   const tPal = palavras(tNorm, true);
+  const todas = tNorm.split(' ');
   // A frase inteira dentro da pergunta é o sinal mais forte (vale até para
-  // frases só de palavras vazias, como "sim e não"). No empate, vence a que
-  // aparece antes na pergunta.
+  // frases só de palavras vazias, como "sim e não"). Dentro da frase, "sim" e
+  // "não" têm sentido e contam no peso ("escrevo sim" vale mais que "escrevo").
+  // No empate, vence a que aparece antes na pergunta.
   const pos = (` ${qNorm} `).indexOf(` ${tNorm} `);
-  if (pos >= 0) return 10 + tPal.length * 2 + (1 - pos / (qNorm.length + 1)) * 0.9;
-  if (tNorm.split(' ').some((p) => SO_FRASE.has(p))) return 0;
+  if (pos >= 0) {
+    const peso = tPal.length + todas.filter((p) => SO_FRASE.has(p)).length;
+    return 10 + peso * 2 + (1 - pos / (qNorm.length + 1)) * 0.9;
+  }
+  if (todas.some((p) => SO_FRASE.has(p))) return 0;
+  // Frase de várias palavras com UMA só de conteúdo ("mais uma caixa", "fazer a
+  // seta") também só vale inteira: palavra por palavra ela vira "caixa" ou "seta"
+  // e passa a responder qualquer dúvida sobre caixas ou setas. (Palavra solta,
+  // como "negrito", continua casando com plural e erro de digitação.)
+  if (tPal.length === 1 && todas.length > 1) return 0;
   if (!tPal.length || !qPalavras.length) return 0;
   let soma = 0;
   for (const tp of tPal) soma += melhorCasamento(tp, qPalavras);

@@ -41,6 +41,12 @@ test('termo com "sim"/"não" só vale inteiro: "mexer na seta" não cai no SIM/N
   assert.equal(buscar(BASE, 'mexer na seta').resposta, null);
 });
 
+test('frase com uma só palavra de conteúdo vale inteira: "mais uma caixa" não pega toda dúvida de caixa', () => {
+  const base = [...BASE, { id: 'nova', pergunta: 'Forma nova', termos: ['mais uma caixa', 'adicionar'], passos: ['x'] }];
+  assert.equal(buscar(base, 'apagar a caixa').resposta, null);
+  assert.equal(buscar(base, 'quero mais uma caixa').resposta.id, 'nova');
+});
+
 test('buscar: nada parecido, sem resposta; campo vazio também', () => {
   assert.equal(buscar(BASE, 'receita de bolo').resposta, null);
   assert.equal(buscar(BASE, '   ').resposta, null);
