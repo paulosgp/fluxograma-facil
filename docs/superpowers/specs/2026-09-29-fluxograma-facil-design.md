@@ -325,3 +325,21 @@ Chrome, Edge e Firefox recentes, no Windows. Internet Explorer fica de fora.
 - **O negrito vale para o texto inteiro da forma,** o que é mais previsível para quem tem
   dificuldade.
 - **O "+" cria uma forma igual à escolhida,** e ela pode ser trocada depois pelo painel.
+
+## 9. O que mudou na construção (29/09/2026)
+
+Os detalhes e os porquês estão no `CLAUDE.md` do app.
+
+- **O losango nasce com 180 × 120 e o círculo com 110 × 110.** Com 150 × 100 e 100 × 100, só cabia
+  uma palavra por linha.
+- **O zoom ocupa a largura da área central, e a folha rola na vertical.** Caber a folha inteira na
+  altura deixaria a letra ilegível.
+- **Backspace numa forma escolhida apaga uma letra.** Quem apaga a forma é o Delete ou o botão
+  "Apagar".
+- **Forma nova sem lugar livre nasce por cima das outras,** com aviso, em vez de ser recusada.
+- **O primeiro começo (sem nada antes) não entra no Desfazer.**
+- **Losango e círculo só aceitam seta reta perto do meio do lado.** Fora disso, a seta sai do
+  vértice e dobra.
+- **A Ajuda ficou só com texto,** sem os desenhos pequenos dos passos.
+- **Os arquivos são os do mapa do `CLAUDE.md`.** O `editor.js` previsto virou `desenho.js`,
+  `interacao.js`, `painel.js` e `loja.js`.

@@ -1,0 +1,153 @@
+# CLAUDE.md — Fluxograma Fácil
+
+Editor de fluxograma **em branco**, feito para os municípios da **6ª Regional de Saúde (União da
+Vitória)** montarem o fluxo municipal do plano de contingência das arboviroses (a dengue,
+principalmente).
+
+O pedido chegou em 29/09/2026. A coordenadora da Regional pediu ao Paulo "um fluxograma editável",
+e o exemplo que ela deu foi o *Fluxo Assistencial – Dengue CID A90* de Curitiba (v10,
+09/12/2024).
+
+A decisão que define o sistema é do Paulo: *"Eu não quero que você escreva nada (a não ser o
+título apenas, que também deve ser editável), e uns quadradinhos, bolinhas, retângulos (como no
+pdf) em branco para o pessoal preencher da forma que eles quiserem... tem que ser mais simples do
+que já existe atualmente em programas como PowerPoint, Paint etc"* — porque *"são pessoas que têm um
+pouco de dificuldade com computador"*.
+
+Desenho aprovado: [docs/superpowers/specs/2026-09-29-fluxograma-facil-design.md](docs/superpowers/specs/2026-09-29-fluxograma-facil-design.md).
+Plano de construção: [docs/superpowers/plans/2026-09-29-fluxograma-facil.md](docs/superpowers/plans/2026-09-29-fluxograma-facil.md)
+(o código dos blocos `arquivo=` foi a primeira versão; o que vale é o que está nos arquivos).
+
+## Infraestrutura compartilhada
+
+Vale a regra da pasta raiz ([`.claude apps/CLAUDE.md`](../CLAUDE.md)). Este app não tem banco,
+login, chave nem dado de paciente, então as regras de RLS/LGPD de lá não o alcançam. O que se aplica
+é manter este arquivo atualizado sem esperar ser pedido.
+
+## O que é e o que não é
+
+- **É** um editor com o mínimo de ferramentas:
+  - formas: retângulo, arredondado, losango, círculo e texto solto;
+  - setas presas às formas;
+  - cor, borda, letra e negrito;
+  - um modelo em branco que repete a estrutura da página 1 de Curitiba;
+  - impressão/PDF em A4;
+  - arquivo para salvar e abrir de novo.
+- **Não escreve conteúdo nenhum.** O único texto pronto é o título do modelo ("Fluxo de atendimento
+  – Dengue"), e ele é editável. **Não acrescente texto clínico a modelo algum** sem o Paulo pedir: foi a
+  primeira coisa que ele recusou.
+- **Não tem servidor.** Tudo roda no navegador de quem usa. O trabalho fica guardado sozinho no
+  `localStorage` daquele navegador (chave `fluxograma-facil:documento`) e, pelo botão, num arquivo
+  `.json` que se abre pelo próprio site.
+
+### Os princípios de uso, que valem para qualquer mudança
+
+O público tem dificuldade com computador. Por isso:
+
+- **Botões grandes, com desenho E nome.** Nenhum botão só com ícone, nada que só apareça ao passar o
+  mouse.
+- **O painel da direita fica sempre no mesmo lugar** e muda conforme o que está escolhido. Não há
+  menu de clique direito nem barra flutuante.
+- **Clicar numa forma é escrever nela. Arrastar é mover.** Não existe duplo clique para aprender.
+- **Tudo se desfaz.** Por isso apagar não pede confirmação.
+- **O desenho se arruma sozinho:** grade de 10 px, linhas-guia, setas em ângulo reto e caixas que
+  crescem com o texto.
+
+## Arquivos
+
+```
+index.html        casca da tela (barra, paleta, folha, painel, tela inicial, diálogo)
+estilo.css        tela e impressão
+js/paleta.js      constantes: cores (por NOME), tipos, tamanhos, folha A4, limites
+js/geometria.js   área do texto de cada forma, altura necessária, ponto no contorno
+js/setas.js       caminho das setas (puro)
+js/encaixe.js     grade, margem, linhas-guia (puro)
+js/modelo.js      o documento e as operações — cada uma devolve um documento NOVO
+js/historico.js   pilhas de desfazer/refazer (fotos JSON)
+js/loja.js        documento + seleção + lotes de desfazer; avisa quem desenha
+js/modelos.js     o modelo em branco (15 formas, 11 setas) e a folha vazia
+js/arquivo.js     validar/consertar arquivo, nome do arquivo, guardar, baixar, abrir
+js/desenho.js     desenha na folha (só reflete, não decide)
+js/interacao.js   mouse e teclado: escrever, mover, alças, laço, "+", modo seta
+js/painel.js      painel da direita
+js/app.js         liga tudo: barra, tela inicial, diálogos, guardado automático, impressão
+testes/           node --test  (61 testes, só dos módulos puros)
+servir.js         servidor da prévia: node servir.js → http://localhost:5180
+fontes/           Archivo e Source Sans 3, copiadas do Guia Saúde
+```
+
+**Prévia:** `preview_start` com o nome `fluxograma-facil` (entrada no `.claude/launch.json` da
+raiz). Módulos ES não carregam com o `index.html` aberto direto do disco, e por isso existe o
+`servir.js`.
+
+## Decisões que não são óbvias no código
+
+- **Documento imutável e loja com lotes.** Toda operação do `modelo.js` devolve outro documento, e
+  o desfazer só guarda fotos. A loja agrupa mudanças num lote (`comecar` → várias `trocar` →
+  `confirmar`), e o lote vira **um** passo de desfazer:
+  - arrastar vai do apertar ao soltar;
+  - digitar vai até 1 s parado ou até sair da forma.
+- **O texto que está sendo editado nunca é reescrito pelo desenho.** Reescrever faria o cursor pular
+  para o começo no meio da digitação.
+- **As formas só são reordenadas no DOM quando a ordem muda de fato,** porque mover um nó tira o
+  foco dele.
+- **O painel só troca o próprio HTML quando o conteúdo muda.** Clicar no painel tira o foco de um
+  texto em edição; isso redesenha tudo, e, se o painel fosse refeito, o botão sob o mouse mudaria
+  entre o apertar e o soltar, e o clique se perderia.
+- **`contenteditable="plaintext-only"`,** com recuo para `true` e colar só texto. O motivo é não
+  entrar negrito ou cor colados do Word. O negrito vale para a forma inteira, decisão aprovada:
+  é mais previsível.
+- **Cores guardadas por nome** (`azul`, `vermelho`...), nunca por código. Assim um tom pode ser
+  ajustado em `paleta.js` sem estragar arquivo salvo.
+- **Setas retas sempre que as formas "se enxergam",** como as de Curitiba, que saem do vértice do
+  losango direto para a caixa ao lado. No losango e no círculo, porém, a reta só é aceita **perto
+  do meio do lado** (um quarto da medida). Mais longe, ela encostaria na aresta inclinada e a seta
+  pareceria sair de lado; nesse caso ela sai do vértice e dobra. O defeito foi visto no teste no
+  navegador em 29/09/2026 e está coberto em `testes/setas.test.js`.
+- **Forma nova sem lugar livre nasce POR CIMA das outras,** perto do meio da tela, com aviso para
+  arrastá-la. O modelo ocupa a folha quase inteira, e a primeira versão respondia "A folha está
+  cheia" a quem estava vendo espaço na tela.
+- **O "+" continua recusando quando não cabe** ("não cabe outra forma desse lado"). A seta dele tem
+  direção, e pôr a forma em outro lugar enganaria.
+- **O primeiro começo não entra no Desfazer.** Logo depois de "Começar com o modelo", o Desfazer
+  levaria a uma folha vazia que a pessoa nunca viu. Trocar um fluxograma que já tinha conteúdo
+  continua desfazível (`loja.carregar(doc, { desfazivel })`).
+- **Backspace numa forma escolhida (sem o cursor nela) apaga uma letra, não a forma.** O desenho
+  aprovado dizia "Delete/Backspace apagam", mas digitar uma letra com a forma escolhida já começa a
+  escrever nela, e o Backspace apagar a forma inteira seria uma surpresa. Quem apaga a forma é o
+  Delete ou o botão.
+- **O losango nasce com 180 × 120 e o círculo com 110 × 110** (o desenho previa 150 × 100 e
+  100 × 100). A área útil de texto deles é bem menor que a forma, e no tamanho previsto só cabia
+  uma palavra curta por linha.
+- **O zoom ocupa a largura da área central** (entre 0,5 e 1,2), com rolagem na vertical. O desenho
+  falava em "caber na tela", mas a folha inteira na altura de um notebook deixaria a letra com
+  8 px. O `scrollbar-gutter: stable` do `.palco` não é enfeite: sem ele, a barra vertical aparecia
+  depois do cálculo do zoom, roubava 15 px e criava rolagem horizontal.
+- **As camadas da folha têm `z-index` explícito** (setas 1, título 2, formas 3, rótulos 4,
+  controles 5). Isso deixa a forma escolhida subir (`z-index: 1`) dentro da camada das formas sem
+  cobrir rótulos e controles. A ordem de impressão continua sendo a do documento.
+- **Na impressão, a folha tem 296 mm, 1 mm a menos que o papel,** para não sair uma página em branco
+  a mais por arredondamento. Isso foi conferido com o Playwright: `emulateMedia('print')` e
+  `page.pdf()` deram **uma** página, sem grade, dicas ou seleção, e com as cores.
+- **Deitar a folha com o modelo amontoa as formas embaixo.** O modelo foi desenhado em pé, e virar
+  só traz para dentro o que ficaria de fora. O Desfazer resolve. Se o Paulo pedir, dá para fazer um
+  modelo próprio para a folha deitada.
+- **A Ajuda ficou só com texto.** O desenho previa um desenho pequeno em cada um dos seis passos.
+
+## Armadilha para testar
+
+**Limpar o `localStorage` e recarregar não volta à tela inicial**, porque o `beforeunload` guarda o
+trabalho de novo ao sair. Para simular a primeira visita:
+`Storage.prototype.setItem = () => {}; localStorage.clear(); location.reload()`. A troca do
+`setItem` morre na recarga.
+
+Pelo painel de navegador do app, a digitação "type" injeta texto sem gerar teclas. Por isso o atalho
+"digitar com a forma escolhida" só pode ser testado com teclas de verdade (a ação "key" ou o
+Playwright).
+
+## Publicação
+
+**Ainda não publicado** (29/09/2026). O desenho prevê GitHub Pages com repositório **público**
+`paulosgp/fluxograma-facil`, com endereço provisório `paulosgp.github.io/fluxograma-facil`, e
+**publicar só com o OK explícito do Paulo**. Um endereço próprio fica para depois. Como o sistema serve
+a Regional inteira, talvez não fique no domínio de São Mateus.
