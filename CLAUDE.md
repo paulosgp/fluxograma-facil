@@ -147,7 +147,13 @@ Playwright).
 
 ## Publicação
 
-**Ainda não publicado** (29/09/2026). O desenho prevê GitHub Pages com repositório **público**
-`paulosgp/fluxograma-facil`, com endereço provisório `paulosgp.github.io/fluxograma-facil`, e
-**publicar só com o OK explícito do Paulo**. Um endereço próprio fica para depois. Como o sistema serve
-a Regional inteira, talvez não fique no domínio de São Mateus.
+**No ar desde 29/09/2026 em `https://paulosgp.github.io/fluxograma-facil/`** (GitHub Pages).
+
+- **Repositório:** `paulosgp/fluxograma-facil`, **público** (o Pages gratuito só serve repositório
+  público), branch `master`, publicado a partir da raiz. O Paulo autorizou ("Publicar agora").
+- **Publicar = commit + `git push`.** O Pages atualiza em 1–2 min, e não há passo de montagem.
+- **Endereço próprio:** ainda nenhum. Como o sistema serve a Regional inteira, talvez não fique no
+  domínio de São Mateus. A decisão é do Paulo.
+- **O espelho `apps`:** o app está no monorepo desde 29/09/2026 (entrou no `PREFIX_MAP` do gancho).
+- **O que vai a público:** o repositório inteiro, inclusive `docs/` e este arquivo. Não há dado
+  pessoal nem de paciente em lugar nenhum; mantenha assim.
