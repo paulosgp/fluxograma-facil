@@ -7,6 +7,7 @@ import { criarPainel } from './painel.js';
 import { modeloDengue, folhaVazia } from './modelos.js';
 import { definirOrientacao } from './modelo.js';
 import { guardarNoNavegador, lerDoNavegador, baixarArquivo, lerArquivo } from './arquivo.js';
+import { criarDuvidas } from './duvidas-tela.js';
 
 const $ = (id) => document.getElementById(id);
 const el = {
@@ -34,7 +35,7 @@ const faixa = {
 
 // ---------- Diálogo ----------
 let fecharDialogo = null;
-const dialogoAberto = () => !$('dialogo').hidden || !$('inicio').hidden;
+const dialogoAberto = () => !$('dialogo').hidden || !$('inicio').hidden || !$('duvidas').hidden;
 
 function dialogo({ titulo, corpo, botoes }) {
   return new Promise((resolve) => {
@@ -62,7 +63,8 @@ function dialogo({ titulo, corpo, botoes }) {
 }
 
 document.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Escape' && fecharDialogo) fecharDialogo('cancelar');
+  if (ev.key === 'Escape' && !$('duvidas').hidden) duvidas.fechar();
+  else if (ev.key === 'Escape' && fecharDialogo) fecharDialogo('cancelar');
   else if (ev.key === 'Escape' && !$('inicio').hidden && !$('ini-voltar').hidden) fecharInicio();
 });
 
@@ -92,12 +94,22 @@ painel = criarPainel({ loja, el: $('painel'), interacao, avisar });
 
 // ---------- Guardado automático ----------
 let relogioGuardar = null;
+// "✓ Guardado" curto de propósito: com a frase inteira, a barra do alto quebrava em
+// duas linhas num notebook de 1366 px e roubava altura da folha. A frase inteira
+// fica no title (aparece ao passar o mouse).
+function marcarGuardado() {
+  const s = $('status');
+  s.classList.remove('ruim');
+  s.textContent = '✓ Guardado';
+  s.title = 'Tudo o que você faz fica guardado sozinho neste computador.';
+}
 function guardar() {
   clearTimeout(relogioGuardar);
-  const ok = guardarNoNavegador(loja.doc);
+  if (guardarNoNavegador(loja.doc)) { marcarGuardado(); return; }
   const s = $('status');
-  s.classList.toggle('ruim', !ok);
-  s.textContent = ok ? '✓ Guardado neste computador' : 'Não deu para guardar neste navegador. Use "Salvar no computador".';
+  s.classList.add('ruim');
+  s.textContent = 'Não deu para guardar neste navegador. Use "Salvar no computador".';
+  s.title = '';
 }
 loja.ouvir((motivo) => {
   redesenhar();
@@ -198,18 +210,32 @@ $('bt-imprimir').addEventListener('click', async () => {
   loja.selecionar({});
   setTimeout(() => window.print(), 50);
 });
-$('bt-ajuda').addEventListener('click', () => dialogo({
-  titulo: 'Como usar',
-  corpo: `<ol>
-    <li><strong>Escrever:</strong> clique numa forma e digite. Para terminar, clique fora dela.</li>
-    <li><strong>Mover:</strong> aperte o botão do mouse em cima da forma e arraste.</li>
-    <li><strong>Forma nova:</strong> use os botões da esquerda (Retângulo, Losango...).</li>
-    <li><strong>Ligar formas:</strong> clique numa forma e depois no <strong>+</strong> azul: nasce outra forma, já ligada por seta. Ou use o botão <strong>Seta</strong>: clique na forma de onde ela sai e depois na forma aonde chega.</li>
-    <li><strong>SIM ou NÃO na seta:</strong> clique na seta e escolha no painel da direita.</li>
-    <li><strong>Errou?</strong> Use <strong>Desfazer</strong>. <strong>Terminou?</strong> Use <strong>Imprimir ou PDF</strong>. Para continuar em outro dia ou em outro computador, use <strong>Salvar no computador</strong> e, depois, <strong>Abrir</strong>.</li>
-  </ol><p>Enquanto você trabalha, tudo fica guardado sozinho neste computador.</p>`,
-  botoes: [{ rotulo: 'Entendi', valor: 'ok', destaque: true }],
-}));
+// ---------- Tire sua dúvida ----------
+// (O passo a passo geral que ficava no antigo botão "Ajuda" virou a resposta
+// "Como usar o sistema, do começo ao fim?", em duvidas.js.)
+// "Mostrar na tela": o alvo pisca (contorno laranja) por uns 3 s.
+function piscar(seletor) {
+  interacao.terminarEdicao();
+  const alvo = document.querySelector(seletor);
+  if (!alvo) return;
+  alvo.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+  alvo.classList.remove('piscando');
+  void alvo.offsetWidth; // reinicia a animação se já estava piscando
+  alvo.classList.add('piscando');
+  setTimeout(() => alvo.classList.remove('piscando'), 3600);
+}
+const duvidas = criarDuvidas({
+  el: {
+    cobertura: $('duvidas'), form: $('duvidas-form'), campo: $('duvidas-campo'),
+    resultado: $('duvidas-resultado'), fechar: $('duvidas-fechar'),
+  },
+  mostrarNaTela: piscar,
+});
+$('bt-duvida').addEventListener('click', () => {
+  interacao.terminarEdicao();
+  interacao.sairModoSeta();
+  duvidas.abrir();
+});
 
 // ---------- Paleta ----------
 for (const b of document.querySelectorAll('.bt-forma[data-tipo]')) {
@@ -228,7 +254,7 @@ $('bt-folha').addEventListener('click', () => {
 // ---------- Começo ----------
 new ResizeObserver(() => redesenhar()).observe(el.palco);
 redesenhar();
-if (guardado) $('status').textContent = '✓ Guardado neste computador';
+if (guardado) marcarGuardado();
 else mostrarInicio(false);
 // Com as fontes carregadas, as medidas de texto mudam: cresce quem ficou apertado.
 document.fonts.ready.then(() => {

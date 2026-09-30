@@ -39,7 +39,8 @@ export function criarPainel({ loja, el, interacao, avisar }) {
       <p class="dica">Nada escolhido.</p>
       <p class="dica"><strong>Para escrever:</strong> clique numa forma e digite.</p>
       <p class="dica"><strong>Para pôr uma forma:</strong> use os botões da esquerda.</p>
-      <p class="dica"><strong>Para ligar formas:</strong> clique numa forma e depois no <strong>+</strong> azul, ou use o botão <strong>Seta</strong>.</p>`;
+      <p class="dica"><strong>Para ligar formas:</strong> clique numa forma e depois no <strong>+</strong> azul, ou use o botão <strong>Seta</strong>.</p>
+      <p class="dica"><strong>Tem dúvida?</strong> Clique em <strong>Tire sua dúvida</strong>, no alto da tela.</p>`;
   }
 
   function htmlFormas(fs) {

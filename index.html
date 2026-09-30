@@ -26,7 +26,7 @@
     <button id="bt-imprimir" class="bt bt-destaque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>Imprimir ou PDF</button>
     <span class="separador"></span>
     <button id="bt-novo" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM12 11v6m-3-3h6"/></svg>Começar outro</button>
-    <button id="bt-ajuda" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>Ajuda</button>
+    <button id="bt-duvida" class="bt bt-duvida"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.2a2 2 0 1 1 2.8 1.8c-.5.2-.8.6-.8 1.2M12 14h.01"/></svg>Tire sua dúvida</button>
   </div>
   <div id="status" class="status" role="status"></div>
   <input type="file" id="entrada-arquivo" accept=".json,application/json" hidden>
@@ -85,6 +85,20 @@
     </div>
     <button id="ini-abrir" class="bt-link">Abrir um fluxograma salvo no computador</button>
     <button id="ini-voltar" class="bt-link" hidden>Voltar para o fluxograma que estava aberto</button>
+  </div>
+</div>
+
+<div id="duvidas" class="cobertura" hidden>
+  <div class="cartao cartao-duvidas" role="dialog" aria-modal="true" aria-labelledby="duvidas-titulo">
+    <div class="duvidas-topo">
+      <h2 id="duvidas-titulo">Tire sua dúvida</h2>
+      <button id="duvidas-fechar" class="bt" type="button">Fechar</button>
+    </div>
+    <form id="duvidas-form" class="duvidas-form" autocomplete="off">
+      <input id="duvidas-campo" type="text" maxlength="200" placeholder="Escreva sua dúvida do seu jeito. Ex.: como apago uma seta?" aria-label="Sua dúvida">
+      <button class="bt bt-destaque" type="submit">Perguntar</button>
+    </form>
+    <div id="duvidas-resultado" class="duvidas-resultado" aria-live="polite"></div>
   </div>
 </div>
 
