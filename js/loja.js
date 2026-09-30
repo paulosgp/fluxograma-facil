@@ -83,11 +83,19 @@ export function criarLoja(docInicial) {
       avisar('selecao');
     },
 
-    // Outro documento inteiro (começar outro, abrir arquivo). Dá para desfazer.
-    carregar(novo) {
+    // Outro documento inteiro (começar outro, abrir arquivo). Dá para desfazer,
+    // menos quando não havia nada antes: logo depois de "Começar com o modelo",
+    // o Desfazer levaria de volta a uma folha vazia que a pessoa nunca viu.
+    carregar(novo, { desfazivel = true } = {}) {
       loja.confirmar();
       selecao = semSelecao();
-      loja.aplicar(novo, 'carregar');
+      if (desfazivel) {
+        loja.aplicar(novo, 'carregar');
+        return;
+      }
+      doc = novo;
+      hist = criarHistorico(100);
+      avisar('carregar');
     },
   };
   return loja;

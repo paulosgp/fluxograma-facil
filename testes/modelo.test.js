@@ -50,6 +50,16 @@ test('lugar livre devolve null quando a folha está cheia', () => {
   assert.equal(lugarLivre(d, 180, 70, { x: 400, y: 500 }), null);
 });
 
+test('sem lugar livre, a forma nasce por cima, perto do ponto pedido, e avisa', () => {
+  let d = documentoVazio();
+  ({ doc: d } = criarForma(d, 'retangulo', { x: 30, y: 30 }));
+  d = atualizarForma(d, 'f1', { l: 734, a: 1063 });
+  const r = criarForma(d, 'losango', null, { perto: { x: 400, y: 500 } });
+  assert.equal(r.sobreposta, true);
+  const f = formaPorId(r.doc, r.id);
+  assert.deepEqual([f.x, f.y], [310, 440]);
+});
+
 test('atualizar forma normaliza: cor desconhecida e letra fora da faixa são corrigidas', () => {
   const d = atualizarForma(comDuas(), 'f1', { cor: 'dourado', letra: 99, texto: 'Oi' });
   const f = formaPorId(d, 'f1');

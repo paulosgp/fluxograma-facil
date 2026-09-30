@@ -202,12 +202,9 @@ export function criarInteracao({ loja, desenho, el, avisar, faixa, redesenhar, d
     sairModoSeta();
     terminarEdicao();
     const r = criarForma(loja.doc, tipo, null, { perto: centroVisivel() });
-    if (r.erro) {
-      avisar('A folha está cheia. Apague ou diminua alguma forma para caber outra.');
-      return;
-    }
     loja.aplicar(r.doc);
     comecarEdicao(r.id);
+    if (r.sobreposta) avisar('Não havia espaço livre na folha: a forma nova ficou por cima das outras. Arraste para onde quiser.');
   }
 
   function criarPeloMais(lado) {

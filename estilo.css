@@ -60,7 +60,9 @@ button { font: inherit; color: inherit; }
 .bt-forma:hover { background: var(--azul-claro); border-color: var(--azul); }
 .bt-forma.ativo { background: #fde68a; border-color: #b7791f; }
 
-.palco { overflow: auto; background: var(--palco); padding: 24px; }
+/* O espaço da barra de rolagem fica reservado: sem isso, a barra vertical aparecia
+   DEPOIS do cálculo do zoom, roubava 15 px e criava uma rolagem horizontal. */
+.palco { overflow: auto; background: var(--palco); padding: 24px; scrollbar-gutter: stable; }
 .folha-caixa { position: relative; margin: 0 auto; }
 
 .folha { position: absolute; left: 0; top: 0; background: #fff; transform-origin: 0 0;
@@ -75,6 +77,13 @@ button { font: inherit; color: inherit; }
   pointer-events: none; }
 
 .camada-setas, .camada-formas, .camada-rotulos, .camada-controles { position: absolute; inset: 0; }
+/* Camadas com ordem explícita: assim a forma escolhida pode subir (z-index) dentro
+   da camada das formas sem passar por cima dos rótulos e dos controles. */
+.camada-setas { z-index: 1; }
+.titulo { z-index: 2; }
+.camada-formas { z-index: 3; }
+.camada-rotulos { z-index: 4; }
+.camada-controles { z-index: 5; }
 .camada-setas { overflow: visible; pointer-events: none; }
 .camada-formas, .camada-rotulos, .camada-controles { pointer-events: none; }
 
@@ -90,8 +99,8 @@ button { font: inherit; color: inherit; }
   display: flex; align-items: center; justify-content: center; text-align: center; color: #8a9099;
   font-size: 13px; pointer-events: none; }
 .forma.tipo-texto:not(.selecionada):not(.editando):not(.fora) { outline: 1px dashed #c3c9d0; }
-.forma.selecionada { outline: 2px dashed var(--azul); outline-offset: 5px; }
-.forma.editando { outline: 2px solid var(--azul); outline-offset: 5px; }
+.forma.selecionada { outline: 2px dashed var(--azul); outline-offset: 5px; z-index: 1; }
+.forma.editando { outline: 2px solid var(--azul); outline-offset: 5px; z-index: 1; }
 .forma.fora { outline: 3px solid var(--perigo); outline-offset: 3px; }
 .folha.arrastando .forma { cursor: grabbing; }
 .folha.modo-seta .forma { cursor: crosshair; }

@@ -55,6 +55,13 @@ test('avisa quem ouve, com o motivo', () => {
   assert.deepEqual(motivos, ['selecao', 'doc', 'historico']);
 });
 
+test('carregar sem desfazer: o primeiro começo não deixa voltar para a folha vazia', () => {
+  const loja = criarLoja(doc());
+  loja.carregar(doc('f1', 'f2'), { desfazivel: false });
+  assert.equal(loja.podeDesfazer(), false);
+  assert.equal(loja.doc.formas.length, 2);
+});
+
 test('carregar outro documento limpa a seleção e pode ser desfeito', () => {
   const loja = criarLoja(doc('f1'));
   loja.selecionar({ formas: ['f1'] });

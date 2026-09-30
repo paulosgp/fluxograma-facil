@@ -137,7 +137,7 @@ async function abrirArquivo(arquivo) {
   if (!r.ok) { avisar(r.erro); return; }
   interacao.terminarEdicao();
   interacao.sairModoSeta();
-  loja.carregar(r.doc);
+  loja.carregar(r.doc, { desfazivel: temConteudo(loja.doc) });
   fecharInicio();
 }
 
@@ -150,8 +150,10 @@ function mostrarInicio(podeVoltar) {
 }
 function fecharInicio() { $('inicio').hidden = true; }
 
-$('ini-modelo').addEventListener('click', () => { loja.carregar(modeloDengue()); fecharInicio(); });
-$('ini-vazia').addEventListener('click', () => { loja.carregar(folhaVazia()); fecharInicio(); });
+// Sem nada antes (o primeiro começo), carregar não entra no Desfazer.
+const comecar = (novo) => { loja.carregar(novo, { desfazivel: temConteudo(loja.doc) }); fecharInicio(); };
+$('ini-modelo').addEventListener('click', () => comecar(modeloDengue()));
+$('ini-vazia').addEventListener('click', () => comecar(folhaVazia()));
 $('ini-abrir').addEventListener('click', () => $('entrada-arquivo').click());
 $('ini-voltar').addEventListener('click', fecharInicio);
 

@@ -130,20 +130,28 @@ export function lugarLivre(doc, l, a, perto) {
 
 // pos: {x, y} do canto, ou null para procurar lugar livre perto de opcoes.perto.
 // opcoes.estilo: forma de onde copiar tamanho, cor, borda e letra (o texto nunca).
+// Sem lugar livre, a forma nasce POR CIMA das outras, perto do ponto pedido
+// (sobreposta: true), em vez de ser recusada: o modelo ocupa a folha quase
+// inteira, e "a folha está cheia" confundia quem via espaço na tela.
 export function criarForma(doc, tipo, pos, opcoes = {}) {
   const pad = TAMANHO_PADRAO[tipo];
   const estilo = opcoes.estilo || {};
   const l = estilo.l ?? pad.l;
   const a = estilo.a ?? pad.a;
   let p = pos;
+  let sobreposta = false;
   if (!p) {
-    p = lugarLivre(doc, l, a, opcoes.perto || centroDaFolha(doc));
-    if (!p) return { doc, id: null, erro: 'sem-espaco' };
+    const perto = opcoes.perto || centroDaFolha(doc);
+    p = lugarLivre(doc, l, a, perto);
+    if (!p) {
+      sobreposta = true;
+      p = limitar({ x: encaixar(perto.x - l / 2), y: encaixar(perto.y - a / 2), l, a }, tamanhoFolha(doc.folha.orientacao));
+    }
   }
   const id = proximoId(doc, 'f');
   const novo = clonar(doc);
   novo.formas.push(normalizarForma({ ...estilo, id, tipo, x: p.x, y: p.y, l, a, texto: '' }));
-  return { doc: novo, id };
+  return { doc: novo, id, sobreposta };
 }
 
 export function atualizarFormas(doc, ids, mudancas) {
