@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fluxograma Fácil</title>
 <meta name="description" content="Monte o fluxograma do seu município de um jeito fácil: formas, setas e texto, pronto para imprimir.">
+<meta name="author" content="Enf. Paulo Gomes (São Mateus do Sul – PR)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a5fb4'/%3E%3Cpath d='M16 5l7 7-7 7-7-7z' fill='%23fff'/%3E%3Cpath d='M16 19v6m-3-3 3 3 3-3' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 <link rel="preload" href="fontes/sourcesans3-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fontes/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -83,8 +84,12 @@
         <span>Só o título. Você põe as formas que quiser.</span>
       </button>
     </div>
-    <button id="ini-abrir" class="bt-link">Abrir um fluxograma salvo no computador</button>
-    <button id="ini-voltar" class="bt-link" hidden>Voltar para o fluxograma que estava aberto</button>
+    <div class="inicio-links">
+      <button id="ini-abrir" class="bt-link">Abrir um fluxograma salvo no computador</button>
+      <a class="bt-link" href="manual.html" target="_blank" rel="noopener">Manual de instruções</a>
+      <button id="ini-voltar" class="bt-link" hidden>Voltar para o fluxograma que estava aberto</button>
+    </div>
+    <p class="creditos" data-creditos></p>
   </div>
 </div>
 
@@ -99,6 +104,7 @@
       <button class="bt bt-destaque" type="submit">Perguntar</button>
     </form>
     <div id="duvidas-resultado" class="duvidas-resultado" aria-live="polite"></div>
+    <p class="duvidas-rodape">Prefere ler tudo com calma? <a href="manual.html" target="_blank" rel="noopener">Abra o manual de instruções</a>.</p>
   </div>
 </div>
 

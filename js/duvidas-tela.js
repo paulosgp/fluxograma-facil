@@ -17,7 +17,12 @@ export function criarDuvidas({ el, mostrarNaTela }) {
     const mostrar = d.mostrar
       ? `<button type="button" class="bt bt-destaque" data-mostrar="${esc(d.mostrar)}">Mostrar na tela</button>`
       : '';
-    return `<div class="resposta"><h3>${esc(d.pergunta)}</h3><ol>${d.passos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>${mostrar}</div>`;
+    // link: abre o manual (outra aba) ou o e-mail do autor.
+    const link = d.link
+      ? `<a class="bt${d.mostrar ? '' : ' bt-destaque'}" href="${esc(d.link.href)}"${d.link.href.startsWith('mailto:') ? '' : ' target="_blank" rel="noopener"'}>${esc(d.link.texto)}</a>`
+      : '';
+    const acoes = mostrar || link ? `<div class="resposta-acoes">${mostrar}${link}</div>` : '';
+    return `<div class="resposta"><h3>${esc(d.pergunta)}</h3><ol>${d.passos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>${acoes}</div>`;
   }
 
   function mostrarComuns() {

@@ -210,11 +210,23 @@ button { font: inherit; color: inherit; }
 .piscando { outline: 4px solid rgba(234, 88, 12, 0); outline-offset: 3px; animation: piscar .7s ease-in-out 5;
   opacity: 1 !important; /* o Desfazer desligado é semitransparente e apagaria o piscar */ }
 
+/* ---------- Marca do autor ---------- */
+.creditos { font-size: 13px; color: var(--texto-2); line-height: 1.5; margin: 14px 0 0; }
+.creditos a, .duvidas-rodape a { color: var(--azul); }
+.cartao-inicio .creditos { text-align: center; border-top: 1px solid var(--linha); padding-top: 12px; }
+.painel .creditos { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--linha); }
+.inicio-links { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+.duvidas-rodape { font-size: 15px; color: var(--texto-2); margin: 14px 0 0; }
+.resposta-acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
 /* ---------- Tela estreita ---------- */
 @media (max-width: 899px) {
   body { overflow: auto; }
   .aviso-tela { display: block; padding: 10px 16px; background: var(--aviso); text-align: center; }
-  .area { display: flex; flex-direction: column; }
+  /* A área cresce com o conteúdo e a página rola: presa na altura da janela, a
+     paleta encolhia até sumir (visto ao capturar a figura do manual). */
+  .area { display: flex; flex-direction: column; flex: none; min-height: auto; }
+  .paleta, .painel, .palco { flex: none; }
   .paleta { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--linha); }
   .paleta h2, .paleta hr { display: none; }
   .bt-forma { min-width: 96px; }

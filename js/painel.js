@@ -4,6 +4,7 @@ import { CORES, ORDEM_CORES, TIPOS, NOMES_TIPOS, LETRA, ROTULO_MAX, MARGEM, tama
 import {
   formaPorId, setaPorId, atualizarFormas, trocarTipo, duplicar, atualizarSeta, inverterSeta, definirTitulo,
 } from './modelo.js';
+import { htmlCreditos } from './creditos.js';
 
 const ICONES = {
   retangulo: '<rect x="3" y="4" width="34" height="20"/>',
@@ -40,7 +41,8 @@ export function criarPainel({ loja, el, interacao, avisar }) {
       <p class="dica"><strong>Para escrever:</strong> clique numa forma e digite.</p>
       <p class="dica"><strong>Para pôr uma forma:</strong> use os botões da esquerda.</p>
       <p class="dica"><strong>Para ligar formas:</strong> clique numa forma e depois no <strong>+</strong> azul, ou use o botão <strong>Seta</strong>.</p>
-      <p class="dica"><strong>Tem dúvida?</strong> Clique em <strong>Tire sua dúvida</strong>, no alto da tela.</p>`;
+      <p class="dica"><strong>Tem dúvida?</strong> Clique em <strong>Tire sua dúvida</strong>, no alto da tela.</p>
+      <p class="creditos">${htmlCreditos()}</p>`;
   }
 
   function htmlFormas(fs) {

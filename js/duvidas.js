@@ -8,13 +8,15 @@
 // solta) e um caso em testes/duvidas.test.js.
 //
 // mostrar: seletor do que pisca em "Mostrar na tela" (tem de existir no index.html).
+// link: { texto, href } — botão que abre o manual (outra aba) ou o e-mail do autor.
+import { CREDITOS } from './creditos.js';
 
 export const BASE = [
   {
     id: 'usar-geral',
     pergunta: 'Como usar o sistema, do começo ao fim?',
     termos: ['como usar', 'como funciona', 'como funciona isso', 'passo a passo', 'por onde comeco', 'por onde começar',
-      'como comecar', 'nao sei usar', 'nao sei mexer', 'primeira vez', 'tutorial', 'manual', 'ajuda', 'me ensina',
+      'como comecar', 'nao sei usar', 'nao sei mexer', 'primeira vez', 'tutorial', 'ajuda', 'me ensina',
       'explicar como funciona', 'o que faco primeiro', 'primeiro passo'],
     passos: [
       'Escolha "Começar com o modelo" (as formas já vêm no lugar) ou "Começar com a folha vazia".',
@@ -517,6 +519,30 @@ export const BASE = [
       'Dá para abrir, ver e imprimir.',
       'Mas montar o fluxograma é bem mais fácil no computador, com mouse.',
     ],
+  },
+  {
+    id: 'quem-fez',
+    pergunta: 'Quem criou o sistema? Como falo com ele?',
+    termos: ['quem fez', 'quem criou', 'quem fez o sistema', 'quem criou o sistema', 'criador', 'autor', 'contato',
+      'falar com o criador', 'falar com alguem', 'email do criador', 'sugestao', 'dar uma sugestao', 'reclamacao',
+      'reclamar', 'encontrei um erro', 'achei um erro', 'deu erro', 'deu problema', 'esta com problema', 'bug', 'suporte'],
+    passos: [
+      `O Fluxograma Fácil foi criado pelo ${CREDITOS.autor}, de ${CREDITOS.lugar}.`,
+      `Dúvidas, sugestões ou problemas: escreva para ${CREDITOS.email}.`,
+      'Se for um problema, conte o que você estava fazendo e, se puder, mande um print da tela.',
+    ],
+    link: { texto: 'Escrever um e-mail', href: `mailto:${CREDITOS.email}` },
+  },
+  {
+    id: 'manual',
+    pergunta: 'Tem um manual para ler com calma?',
+    termos: ['manual', 'manual de instrucoes', 'instrucoes', 'tem manual', 'apostila', 'guia', 'passo a passo por escrito',
+      'ler com calma', 'imprimir o manual', 'pdf do manual'],
+    passos: [
+      'Tem sim. Ele explica tudo, com figuras, e pode ser impresso.',
+      'Clique no botão abaixo, ou abra pela tela inicial, em "Manual de instruções".',
+    ],
+    link: { texto: 'Abrir o manual', href: 'manual.html' },
   },
   {
     id: 'cancelar-seta',

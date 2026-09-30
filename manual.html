@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual — Fluxograma Fácil</title>
+<meta name="description" content="Manual de instruções do Fluxograma Fácil: como montar e imprimir o fluxograma do seu município.">
+<meta name="author" content="Enf. Paulo Gomes (São Mateus do Sul – PR)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a5fb4'/%3E%3Cpath d='M16 5l7 7-7 7-7-7z' fill='%23fff'/%3E%3Cpath d='M16 19v6m-3-3 3 3 3-3' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<style>
+@font-face { font-family: 'Archivo'; font-weight: 600 700; font-display: swap; src: url(fontes/archivo-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Source Sans 3'; font-weight: 400 600; font-display: swap; src: url(fontes/sourcesans3-latin.woff2) format('woff2'); }
+:root { --azul: #1a5fb4; --azul-forte: #134a8e; --azul-claro: #e3edfb; --texto: #1f2328; --texto-2: #57606a; --linha: #d0d7de; --aviso: #fff4ce; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f3f5f8; color: var(--texto); font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif; font-size: 17px; line-height: 1.55; }
+main { max-width: 820px; margin: 0 auto; background: #fff; padding: 36px 44px 28px; }
+h1, h2, h3 { font-family: 'Archivo', 'Segoe UI', sans-serif; color: var(--azul-forte); line-height: 1.2; }
+h1 { font-size: 32px; margin: 0; }
+h2 { font-size: 22px; margin: 34px 0 10px; padding-top: 12px; border-top: 2px solid var(--azul-claro); }
+h3 { font-size: 18px; margin: 20px 0 6px; color: var(--texto); }
+p { margin: 8px 0; }
+ol, ul { margin: 8px 0; padding-left: 24px; }
+li { margin-bottom: 5px; }
+a { color: var(--azul); }
+.capa { display: flex; align-items: center; gap: 16px; }
+.capa svg { width: 56px; height: 56px; flex: none; }
+.subtitulo { font-size: 19px; color: var(--texto-2); margin: 6px 0 0; }
+.endereco { margin: 18px 0 6px; padding: 12px 16px; background: var(--azul-claro); border-radius: 10px; font-size: 18px; }
+.endereco strong { font-size: 21px; }
+.baixar { display: inline-block; margin-top: 8px; padding: 8px 14px; border-radius: 8px; background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; }
+.caixa { background: var(--aviso); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+.caixa > strong:first-child { display: block; }
+figure { margin: 14px auto; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; border: 1px solid var(--linha); border-radius: 8px; }
+figcaption { font-size: 14px; color: var(--texto-2); margin-top: 4px; }
+.pequena img { max-width: 200px; }
+.media img { max-width: 440px; }
+.grande img { max-width: 640px; }
+.lado { display: flex; gap: 22px; align-items: flex-start; break-inside: avoid; }
+.lado > div { flex: 1; min-width: 0; }
+.lado figure { flex: none; margin: 4px 0; }
+kbd { font-family: inherit; font-size: 15px; padding: 1px 7px; border: 1px solid var(--linha); border-bottom-width: 2px; border-radius: 5px; background: #f6f8fa; }
+.botao { display: inline-block; padding: 0 8px; border: 1px solid var(--linha); border-radius: 6px; background: #fff; font-weight: 600; white-space: nowrap; }
+.problemas dt { font-weight: 600; margin-top: 12px; }
+.problemas dd { margin: 2px 0 0 0; }
+footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--linha); color: var(--texto-2); font-size: 15px; text-align: center; }
+@media (max-width: 640px) { main { padding: 22px 16px; } .lado { flex-direction: column; } }
+@page { size: A4; margin: 14mm 14mm 16mm; }
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  main { max-width: none; padding: 0; }
+  .baixar { display: none; }
+  h2 { break-after: avoid; }
+  h3 { break-after: avoid; }
+  .quebra { break-before: page; }
+  a { color: var(--texto); text-decoration: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<div class="capa">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1a5fb4"/><path d="M16 5l7 7-7 7-7-7z" fill="#fff"/><path d="M16 19v6m-3-3 3 3 3-3" stroke="#fff" stroke-width="2" fill="none"/></svg>
+  <div>
+    <h1>Fluxograma Fácil</h1>
+    <p class="subtitulo">Manual de instruções</p>
+  </div>
+</div>
+
+<p class="endereco">Para abrir, digite no navegador: <strong>fluxograma.guiaaps.com.br</strong></p>
+<a class="baixar" href="manual.pdf" download>Baixar este manual em PDF</a>
+
+<h2>1. O que é</h2>
+<p>O Fluxograma Fácil serve para montar o <strong>fluxograma de atendimento</strong> do plano de contingência das
+arboviroses do seu município: formas, setas e texto, pronto para imprimir ou salvar em PDF.</p>
+<p>Ele foi feito para ser <strong>mais fácil que o PowerPoint</strong>: você clica na forma e escreve, arrasta para mudar
+de lugar, e tudo se ajeita sozinho.</p>
+<div class="caixa">
+  <strong>O que você precisa</strong>
+  Um computador com mouse e internet para abrir a página (use o Google Chrome ou o Microsoft Edge).
+  Não precisa instalar nada, não tem senha e não custa nada.
+</div>
+<p>O sistema <strong>não traz texto pronto</strong>: quem escreve o conteúdo do fluxograma é cada município, conforme o
+seu protocolo e a sua rede de atendimento.</p>
+
+<h2>2. Começando</h2>
+<p>Ao abrir pela primeira vez, você escolhe como começar:</p>
+<ul>
+  <li><strong>Começar com o modelo</strong>: as formas já vêm no lugar, todas em branco. É só escrever.</li>
+  <li><strong>Começar com a folha vazia</strong>: só o título. Você põe as formas que quiser.</li>
+</ul>
+<figure class="media"><img src="manual/01-inicio.png" alt="Tela inicial com os dois jeitos de começar"><figcaption>A tela inicial.</figcaption></figure>
+<p>Nas próximas vezes, o sistema abre direto no fluxograma em que você estava trabalhando.</p>
+
+<h2>3. A tela</h2>
+<ul>
+  <li><strong>No alto</strong>: os botões de desfazer, salvar, abrir, imprimir, começar outro e tirar dúvida.</li>
+  <li><strong>À esquerda</strong>: as formas que você pode pôr na folha, o botão Seta e o botão de deitar a folha.</li>
+  <li><strong>No meio</strong>: a folha A4.</li>
+  <li><strong>À direita</strong>: as opções do que está escolhido (cor, letra, apagar...).</li>
+</ul>
+<figure class="grande"><img src="manual/02-barra.png" alt="Barra de botões no alto da tela"><figcaption>A barra do alto.</figcaption></figure>
+
+<h2>4. Escrever numa forma</h2>
+<div class="lado">
+  <div>
+    <ol>
+      <li><strong>Clique uma vez</strong> na forma.</li>
+      <li>Quando aparecer o risquinho piscando, <strong>digite</strong>.</li>
+      <li>Para pular uma linha, aperte <kbd>Enter</kbd>.</li>
+      <li>Para terminar, <strong>clique fora</strong> da forma.</li>
+    </ol>
+    <p>Se o texto não couber, a forma <strong>cresce sozinha</strong> para baixo.</p>
+    <p>Para corrigir, clique no ponto do texto e use a tecla de apagar (<kbd>Backspace</kbd>).</p>
+  </div>
+  <figure class="media"><img src="manual/04-escrever.png" alt="Escrevendo dentro de um losango" style="max-width:300px"><figcaption>Escrevendo no losango.</figcaption></figure>
+</div>
+
+<h2>5. Mover e mudar o tamanho</h2>
+<div class="lado">
+  <div>
+    <p><strong>Mover</strong>: aperte o botão do mouse em cima da forma e, sem soltar, arraste. Ela se ajeita sozinha e as
+    setas vão junto.</p>
+    <p><strong>Mudar o tamanho</strong>: clique na forma. Aparecem <strong>quadradinhos azuis</strong> nos cantos: puxe um
+    deles para aumentar ou diminuir.</p>
+    <p><strong>Várias de uma vez</strong>: aperte o mouse num lugar vazio da folha e arraste, fazendo um retângulo em volta
+    das formas. Depois, arraste todas juntas.</p>
+  </div>
+  <figure class="media"><img src="manual/05-mais.png" alt="Forma escolhida com os mais azuis e os quadradinhos dos cantos" style="max-width:300px"><figcaption>Forma escolhida: quadradinhos nos cantos e os <strong>+</strong> azuis.</figcaption></figure>
+</div>
+
+<h2>6. Pôr uma forma nova</h2>
+<p>Use os botões da esquerda, em <strong>Pôr na folha</strong>:</p>
+<figure class="grande"><img src="manual/03-paleta.png" alt="Botões das formas: Retângulo, Arredondado, Losango, Círculo, Texto, Seta e Deitar a folha"></figure>
+<ul>
+  <li><strong>Losango</strong>: uma pergunta de SIM ou NÃO.</li>
+  <li><strong>Retângulo</strong> ou <strong>Arredondado</strong>: o que fazer, o passo, o lugar.</li>
+  <li><strong>Círculo</strong>: o começo ou o fim do fluxo.</li>
+  <li><strong>Texto</strong>: uma observação solta, sem caixa.</li>
+</ul>
+<p>Clique no botão: a forma aparece na folha, pronta para escrever. Depois, arraste para o lugar certo.</p>
+
+<h2>7. Ligar as formas com setas</h2>
+<h3>Jeito mais fácil: o + azul</h3>
+<p>Clique numa forma e depois no <strong>+</strong> azul do lado onde você quer a próxima. Nasce outra forma igual,
+<strong>já ligada por seta</strong>, pronta para escrever.</p>
+<h3>Ligar duas formas que já existem: o botão Seta</h3>
+<ol>
+  <li>Clique no botão <span class="botao">Seta</span>, à esquerda. Aparece uma faixa amarela no alto.</li>
+  <li>Clique na forma de onde a seta <strong>sai</strong>.</li>
+  <li>Clique na forma aonde a seta <strong>chega</strong>.</li>
+</ol>
+<figure class="grande"><img src="manual/07-modo-seta.png" alt="Faixa amarela: clique na forma de onde a seta sai"><figcaption>A faixa amarela diz o que fazer. Para desistir, clique em Cancelar.</figcaption></figure>
+<p>As setas ficam <strong>presas</strong> às formas: se você mover a forma, a seta vai junto.</p>
+
+<h2>8. SIM ou NÃO na seta</h2>
+<div class="lado">
+  <div>
+    <ol>
+      <li>Clique em cima da seta. Ela fica azul.</li>
+      <li>No painel da direita, clique em <span class="botao">SIM</span> ou <span class="botao">NÃO</span>.</li>
+      <li>Para outra palavra, escreva em <em>Ou escreva outro</em> e clique em <span class="botao">Pôr</span>.</li>
+    </ol>
+    <p>No mesmo painel dá para <strong>inverter</strong> a seta (se ela apontou para o lado errado) ou
+    <strong>ajustar o caminho</strong> dela (por onde sai e por onde chega).</p>
+    <figure class="media"><img src="manual/09-seta-sim.png" alt="Seta com a palavra SIM" style="max-width:360px"><figcaption>A seta com SIM.</figcaption></figure>
+  </div>
+  <figure class="pequena"><img src="manual/08-painel-seta.png" alt="Painel da seta escolhida: SIM, NÃO, Sem texto" style="max-width:220px"><figcaption>O painel da seta.</figcaption></figure>
+</div>
+
+<h2>9. Cor, borda, letra e formato</h2>
+<div class="lado">
+  <div>
+    <p>Clique na forma e use o painel da direita:</p>
+    <ul>
+      <li><strong>Cor</strong>: clique na cor que quiser.</li>
+      <li><strong>Borda</strong>: Lisa ou Tracejada (pontilhada).</li>
+      <li><strong>Letra</strong>: <span class="botao">A+</span> aumenta, <span class="botao">A−</span> diminui,
+      <span class="botao">Negrito</span> deixa forte; <span class="botao">À esquerda</span> serve para listas.</li>
+      <li><strong>Trocar a forma</strong>: vira losango, círculo... sem perder o texto.</li>
+      <li><span class="botao">Duplicar</span> faz uma cópia; <span class="botao">Apagar</span> apaga.</li>
+    </ul>
+  </div>
+  <figure class="pequena"><img src="manual/06-painel-forma.png" alt="Painel da forma escolhida" style="max-width:190px;max-height:430px"><figcaption>O painel da forma.</figcaption></figure>
+</div>
+
+<h2>10. Apagar e desfazer</h2>
+<ul>
+  <li><strong>Apagar uma forma ou seta</strong>: clique nela e depois em <span class="botao">Apagar</span>, no painel da
+  direita (ou aperte a tecla <kbd>Delete</kbd>). As setas da forma somem junto.</li>
+  <li><strong>Errou? Clique em <span class="botao">Desfazer</span></strong>, no alto (ou <kbd>Ctrl</kbd> + <kbd>Z</kbd>).
+  Cada clique volta um passo. Voltou demais? <span class="botao">Refazer</span>.</li>
+</ul>
+<p>Pode mexer sem medo: <strong>tudo pode ser desfeito</strong>.</p>
+
+<h2>11. Título e folha deitada</h2>
+<ul>
+  <li><strong>Título</strong>: clique na faixa do alto da folha e escreva. Para mudar a cor da faixa, clique nela e escolha no
+  painel da direita.</li>
+  <li><strong>Folha deitada</strong>: clique em <span class="botao">Deitar a folha</span>, à esquerda. O modelo foi feito
+  com a folha em pé; se deitar e ficar bagunçado, clique em Desfazer.</li>
+</ul>
+
+<h2>12. Imprimir ou salvar em PDF</h2>
+<div class="lado">
+  <div>
+    <ol>
+      <li>Clique em <span class="botao">Imprimir ou PDF</span>, no alto, e depois em <span class="botao">Continuar</span>.</li>
+      <li>Para <strong>papel</strong>: escolha a impressora e clique em Imprimir.</li>
+      <li>Para <strong>PDF</strong>: em <strong>Destino</strong>, escolha <strong>Salvar como PDF</strong> e clique em Salvar.</li>
+    </ol>
+    <p>Sai <strong>só a folha</strong>, em A4, com as cores. Os quadradinhos cinza e as dicas "Clique e escreva" não
+    saem no papel.</p>
+  </div>
+  <figure class="media"><img src="manual/11-imprimir.png" alt="Janela de imprimir ou salvar em PDF" style="max-width:320px"></figure>
+</div>
+
+<h2>13. Salvar e continuar depois</h2>
+<ul>
+  <li>Enquanto você trabalha, o sistema <strong>guarda tudo sozinho neste computador</strong> (aparece
+  <em>✓ Guardado</em> no alto). Pode fechar e abrir de novo: estará tudo lá.</li>
+  <li>Para ter um <strong>arquivo</strong>, ou continuar em <strong>outro computador</strong>: clique em
+  <span class="botao">Salvar no computador</span>. O arquivo vai para a pasta <strong>Downloads</strong>, com o nome
+  "Fluxograma - ...". No outro computador, abra o site e clique em <span class="botao">Abrir</span>.</li>
+  <li>Para <strong>mandar para a Regional</strong>: mande o <strong>PDF</strong> (item 12). Se for para alguém continuar
+  mexendo, mande o arquivo do "Salvar no computador".</li>
+</ul>
+
+<h2>14. Tire sua dúvida</h2>
+<div class="lado">
+  <div>
+    <p>Clique no botão amarelo <span class="botao">Tire sua dúvida</span>, no alto, e escreva do seu jeito, por exemplo:
+    <em>"errei, como volto?"</em>, <em>"a seta ficou torta"</em>, <em>"quero salvar em pdf"</em>.</p>
+    <p>A resposta vem em passos. O botão <span class="botao">Mostrar na tela</span> faz piscar, em laranja, o botão
+    que você precisa usar.</p>
+  </div>
+  <figure class="media"><img src="manual/10-duvida.png" alt="Janela Tire sua dúvida com uma resposta" style="max-width:360px"></figure>
+</div>
+
+<h2>15. Problemas comuns</h2>
+<dl class="problemas">
+  <dt>Apaguei sem querer.</dt><dd>Clique em Desfazer, no alto, quantas vezes precisar.</dd>
+  <dt>Uma forma sumiu atrás de outra.</dt><dd>Clique na parte que aparece (ela vem para a frente) e arraste para um lugar livre.</dd>
+  <dt>A forma ficou com contorno vermelho.</dt><dd>Ela passou da margem da folha e pode sair cortada. Diminua a letra ou alargue a forma.</dd>
+  <dt>A seta ficou torta.</dt><dd>Alinhe as formas (uma embaixo ou ao lado da outra) ou clique na seta e use "Ajustar caminho".</dd>
+  <dt>Fechei a página. Perdi tudo?</dt><dd>Não. Abrindo de novo no mesmo computador e no mesmo navegador, está tudo lá.</dd>
+  <dt>Dá para usar no celular?</dt><dd>Dá para ver e imprimir, mas montar é bem mais fácil no computador, com mouse.</dd>
+</dl>
+
+<footer>
+  Fluxograma Fácil · criado por <strong>Enf. Paulo Gomes</strong> · São Mateus do Sul – PR<br>
+  Dúvidas, sugestões ou problemas: <a href="mailto:paulosergiogp@hotmail.com">paulosergiogp@hotmail.com</a><br>
+  Manual — versão 1, setembro de 2026
+</footer>
+
+</main>
+</body>
+</html>

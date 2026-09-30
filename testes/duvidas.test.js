@@ -28,6 +28,15 @@ test('todo "Mostrar na tela" aponta para algo que existe no index.html', () => {
   for (const d of BASE) if (d.mostrar) assert.ok(existeNaTela(d.mostrar), `${d.id}: ${d.mostrar}`);
 });
 
+test('todo link de resposta é e-mail ou arquivo que existe no site', () => {
+  for (const d of BASE) {
+    if (!d.link) continue;
+    assert.ok(d.link.texto, `${d.id}: link sem texto`);
+    if (d.link.href.startsWith('mailto:')) continue;
+    assert.ok(fs.existsSync(new URL(`../${d.link.href}`, import.meta.url)), `${d.id}: ${d.link.href} não existe`);
+  }
+});
+
 // Frases do jeito que as pessoas escrevem: sem acento, com erro, falando "caixa".
 const CASOS = [
   ['errei como volto', 'desfazer'],
@@ -110,6 +119,12 @@ const CASOS = [
   ['nao to conseguindo apagar a seta', 'apagar-seta'],
   ['como volta o que apaguei', 'desfazer'],
   ['como coloco nao na seta', 'sim-nao'],
+  ['quem criou esse sistema', 'quem-fez'],
+  ['encontrei um erro no sistema', 'quem-fez'],
+  ['quero dar uma sugestao', 'quem-fez'],
+  ['tem manual?', 'manual'],
+  ['quero imprimir o manual', 'manual'],
+  ['deu errado', 'desfazer'],
   ['nao acho o arquivo', 'abrir'],
   ['quero colocar um texto sem caixa', 'forma-nova'],
   ['como eu escrevo sim', 'sim-nao'],
