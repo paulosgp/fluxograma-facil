@@ -24,6 +24,10 @@ Vale a regra da pasta raiz ([`.claude apps/CLAUDE.md`](../CLAUDE.md)). Este app 
 login, chave nem dado de paciente, então as regras de RLS/LGPD de lá não o alcançam. O que se aplica
 é manter este arquivo atualizado sem esperar ser pedido.
 
+Desde 30/09/2026 há **uma** dependência de fora: a contagem anônima de acessos grava pelo script do
+**Guia Clínico** (seção "Contagem de acessos e o aviso diário"). Se aquele script sair do ar ou mudar
+de endereço, só a contagem para; o app continua funcionando.
+
 ## O que é e o que não é
 
 - **É** um editor com o mínimo de ferramentas:
@@ -38,7 +42,8 @@ login, chave nem dado de paciente, então as regras de RLS/LGPD de lá não o al
   primeira coisa que ele recusou.
 - **Não tem servidor.** Tudo roda no navegador de quem usa. O trabalho fica guardado sozinho no
   `localStorage` daquele navegador (chave `fluxograma-facil:documento`) e, pelo botão, num arquivo
-  `.json` que se abre pelo próprio site.
+  `.json` que se abre pelo próprio site. O desenho nunca sai dali; a única coisa que sai é o aviso
+  anônimo de que o app foi aberto (a contagem de acessos, mais abaixo).
 
 ### Os princípios de uso, que valem para qualquer mudança
 
@@ -73,8 +78,10 @@ js/painel.js      painel da direita
 js/busca.js       motor do "Tire sua dúvida" (puro) — ver a seção própria
 js/duvidas.js     a BASE do "Tire sua dúvida": perguntas, jeitos de perguntar, passos
 js/duvidas-tela.js a janela do "Tire sua dúvida"
+js/creditos.js    a marca do autor (fonte única)
+js/acesso.js      contagem anônima de acessos, uma vez por sessão — ver a seção própria
 js/app.js         liga tudo: barra, tela inicial, diálogos, guardado automático, impressão
-testes/           node --test  (158 testes, só dos módulos puros)
+testes/           node --test  (175 testes, só dos módulos puros)
 servir.js         servidor da prévia: node servir.js → http://localhost:5180
 fontes/           Archivo e Source Sans 3, copiadas do Guia Saúde
 ```
@@ -174,7 +181,7 @@ de chave, e nenhuma cota que um estranho possa gastar pelo link público. Desenh
 
   Dentro de frase inteira, "sim" e "não" contam no peso. Por isso "escrevo sim" ganha de
   "escrevo".
-- **A base (`duvidas.js`)** tem 43 perguntas **sobre o uso do sistema; nada clínico**. **É na base
+- **A base (`duvidas.js`)** tem 46 perguntas **sobre o uso do sistema; nada clínico**. **É na base
   que se ensina, não no motor.** Quando uma pergunta cair na resposta errada:
   1. acrescente frases com **duas palavras de conteúdo** nos `termos` do item certo;
   2. acrescente um caso em `testes/duvidas.test.js`.
@@ -182,11 +189,11 @@ de chave, e nenhuma cota que um estranho possa gastar pelo link público. Desenh
   Cuidado com palavra solta que fica a uma letra de uma palavra comum: "grade" pegava "grave", e
   "gravar" pegava "grave", o que fazia "dengue grave" cair em "salvar".
 - **Os testes:**
-  - `testes/duvidas.test.js` tem 85 frases do jeito que as pessoas escrevem, cada uma com a
+  - `testes/duvidas.test.js` tem 96 frases do jeito que as pessoas escrevem, cada uma com a
     resposta esperada, mais três perguntas fora do assunto que têm de ficar sem resposta;
   - todo `mostrar` tem de existir no `index.html`.
-- **Limite conhecido:** como nada sai do computador, não há como saber o que as pessoas perguntaram.
-  A lista melhora com o que o Paulo for contando.
+- **Limite conhecido:** as perguntas não saem do computador (só a contagem de aberturas sai), então
+  não há como saber o que as pessoas perguntaram. A lista melhora com o que o Paulo for contando.
 
 ## Armadilha para testar
 
@@ -227,6 +234,55 @@ Playwright).
   janela e a paleta encolhia até sumir. Apareceu ao capturar a figura da paleta. Agora a área cresce
   com o conteúdo e a página rola.
 
+## Contagem de acessos e o aviso diário (30/09/2026)
+
+Pedido do Paulo: *"quero que tenha a mesma configuração do guia clínico em relação a eu saber quantas
+pessoas estão utilizando ele... com a rotina de me avisar todos os dias quantas vezes foi acessado"*.
+
+- **Como funciona (`js/acesso.js`).** Uma vez por sessão do navegador, o app faz um GET no script
+  do Guia Clínico com `acao=acesso&app=fluxograma&uid=<número sorteado no aparelho>&v=1`. O script
+  grava data, uid e versão na aba **`acessos_fluxograma`** da planilha "GuiaClinicoAPS -
+  Dispositivos", no Drive do Paulo.
+  - O `uid` fica no `localStorage` (`ff_uid`). É ele que permite contar aparelhos distintos.
+  - A sessão é marcada no `sessionStorage` (`ff_ping_ok`) só quando o aviso chega. Sem internet, o
+    app tenta de novo na próxima abertura.
+  - Não vai nome, e-mail nem nada do desenho. A pergunta `privacidade` do "Tire sua dúvida", o
+    manual (item 13) e o roteiro dizem isso a quem usa. Antes diziam "nada sai do computador", que
+    deixou de ser verdade.
+- **Por que o script do Guia Clínico, e não um próprio.** A primeira tentativa foi um script novo,
+  numa planilha nova. Implantar exigia autorizar o script na conta Google, e a janela de
+  autorização abria fora do alcance do Claude in Chrome. O Paulo não conseguiu concluir a tempo e
+  escolheu reaproveitar o do Guia Clínico, que já estava autorizado.
+  - A mudança lá foi só acréscimo: um ramo `app=fluxograma` no `doGet`, **antes** do ramo `acesso`
+    do Guia, e a função que grava na aba nova. Foi a Versão 6 da mesma implantação, com o mesmo
+    endereço, e não pediu autorização nova.
+  - O código daquele script **não vem para este repositório**: ele tem a chave de administração do
+    Guia Clínico, e este repositório é público.
+- **Não conta em `localhost` nem com o arquivo aberto do disco,** para os testes de quem desenvolve
+  não virarem acesso. Os testes automáticos passam um `fetch` falso, porque o de verdade gravaria
+  na planilha. Para testar o caminho inteiro à mão, use um `uid` começando com `teste`: o aviso
+  diário ignora essas linhas. A linha `teste-instalacao` de 30/09 é da instalação.
+- **A aba nova fica no FIM da planilha, de propósito.** O `insertSheet` a criou logo depois da
+  primeira aba, antes da `acessos` do Guia Clínico, e o relatório semanal do Guia dizia "a primeira
+  tabela é a aba acessos". A aba foi movida para o fim, e o relatório do Guia passou a citar o nome
+  exato da aba.
+- **O aviso diário.** Uma rotina do Claude na nuvem roda todo dia às 7h (Brasília). Ela lê a aba
+  pelo conector do Google Drive e manda no celular do Paulo:
+  - os acessos de ontem, de quantos aparelhos, e quantos deles são novos;
+  - o total desde 30/09.
+
+  O id e os detalhes da rotina estão no `CLAUDE.md` da raiz, em "Rotinas do Claude na nuvem".
+- **Limites.**
+  - A conta subestima o uso real: só conta aberturas com internet, uma por sessão do navegador.
+  - O mesmo computador em dois navegadores conta como dois aparelhos.
+  - O conector do Drive devolve a aba como "amostra". Até hoje ela vem inteira, mas, se um dia vier
+    cortada, o aviso diz que os números estão incompletos. Para isso, ele compara as linhas
+    recebidas com o `Table Range`.
+- **Mudar o que se conta exige mexer nos dois lados:** aqui (`acesso.js`) e no script do Guia
+  Clínico. Lá, a mudança se publica pelo editor do Apps Script, em **nova versão da MESMA
+  implantação**. Uma implantação nova mudaria o endereço, e o app (e o Guia Clínico) parariam de
+  contar.
+
 ## Publicação
 
 **No ar em `https://fluxograma.guiaaps.com.br`** desde 30/09/2026, no GitHub Pages com domínio
@@ -254,7 +310,10 @@ redireciona sozinho (301) para o endereço novo.
     antigo redireciona para um endereço que não responde, e o site sai do ar.
   - **O Registro.br pede login do Paulo,** e senha é algo que o Claude não digita.
 - **O espelho `apps`:** o app está no monorepo desde 29/09/2026 (entrou no `PREFIX_MAP` do gancho).
-- **Guia Saúde:** tem cartão lá desde 30/09/2026, no fim de "Sistemas", para "Coordenação e
-  enfermeiros". As decisões estão no `CLAUDE.md` do Guia Saúde.
+- **Guia Saúde:** tem cartão lá desde 30/09/2026, na seção **"Ferramentas"** (criada para ele no
+  fim da página; o Paulo não quis em "Sistemas"), para "Coordenação e enfermeiros". As decisões estão
+  no `CLAUDE.md` do Guia Saúde.
 - **O que vai a público:** o repositório inteiro, inclusive `docs/` e este arquivo. Não há dado
-  pessoal nem de paciente em lugar nenhum; mantenha assim.
+  pessoal nem de paciente em lugar nenhum; mantenha assim. Também não entram aqui o código do
+  script do Guia Clínico (tem a chave de administração dele) nem os ids da planilha e da rotina.
+  Eles ficam no `CLAUDE.md` da raiz, que não é publicado.

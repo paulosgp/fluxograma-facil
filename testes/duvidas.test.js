@@ -131,6 +131,10 @@ const CASOS = [
   ['quero mudar a cor do losango', 'cor'],
   ['como faço pra caixa ficar tracejada', 'borda'],
   ['errei tudo', 'desfazer'],
+  ['alguem mais ve o que eu fiz?', 'privacidade'],
+  ['o fluxograma vai pra internet?', 'privacidade'],
+  ['o sistema pega meus dados', 'privacidade'],
+  ['e seguro?', 'privacidade'],
 ];
 
 for (const [frase, esperado] of CASOS) {

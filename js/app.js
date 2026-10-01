@@ -9,6 +9,7 @@ import { definirOrientacao } from './modelo.js';
 import { guardarNoNavegador, lerDoNavegador, baixarArquivo, lerArquivo } from './arquivo.js';
 import { criarDuvidas } from './duvidas-tela.js';
 import { htmlCreditos } from './creditos.js';
+import { avisarAcesso } from './acesso.js';
 
 const $ = (id) => document.getElementById(id);
 const el = {
@@ -258,6 +259,7 @@ $('bt-folha').addEventListener('click', () => {
 
 // ---------- Começo ----------
 for (const n of document.querySelectorAll('[data-creditos]')) n.innerHTML = htmlCreditos();
+avisarAcesso();
 new ResizeObserver(() => redesenhar()).observe(el.palco);
 redesenhar();
 if (guardado) marcarGuardado();

@@ -534,6 +534,20 @@ export const BASE = [
     link: { texto: 'Escrever um e-mail', href: `mailto:${CREDITOS.email}` },
   },
   {
+    // A contagem de acessos (js/acesso.js) mudou o "nada sai do computador": o
+    // desenho continua não saindo, mas um aviso anônimo sai. Melhor dizer.
+    id: 'privacidade',
+    pergunta: 'O que eu desenho vai para a internet? Alguém mais vê?',
+    termos: ['privacidade', 'alguem ve', 'alguem mais ve', 'quem ve o que eu fiz', 'outras pessoas veem', 'vai para a internet',
+      'vai pra internet', 'fica na internet', 'meus dados', 'coleta dados', 'pega meus dados', 'e seguro', 'seguranca',
+      'sigilo', 'confidencial', 'lgpd', 'dado de paciente', 'conta os acessos', 'rastreia', 'manda pra algum lugar'],
+    passos: [
+      'Não. O fluxograma fica só neste computador, guardado no próprio navegador. Ninguém mais vê, nem o autor.',
+      'Ele só sai daqui quando você manda: o PDF ou o arquivo de "Salvar no computador".',
+      'O sistema só conta quantas vezes foi aberto, sem saber quem abriu: vai um número sorteado neste computador, sem nome nem e-mail.',
+    ],
+  },
+  {
     id: 'manual',
     pergunta: 'Tem um manual para ler com calma?',
     termos: ['manual', 'manual de instrucoes', 'instrucoes', 'tem manual', 'apostila', 'guia', 'passo a passo por escrito',
