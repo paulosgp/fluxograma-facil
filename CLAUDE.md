@@ -283,6 +283,10 @@ pessoas estão utilizando ele... com a rotina de me avisar todos os dias quantas
   implantação**. Uma implantação nova mudaria o endereço, e o app (e o Guia Clínico) parariam de
   contar.
 
+## Curso na Trilha de Integração
+
+Este sistema tem curso na Trilha de Integração (`Guia Saude App/src/lib/integracao/cursos/fluxograma.ts`). Ele ensina abrir e escolher entre o modelo e a folha vazia, escrever nas formas, ligar com o **+** azul e o botão **Seta**, **SIM**/**NÃO** na seta, o painel da direita (cor, borda, letra, trocar a forma), **Desfazer**, o guardado automático no navegador × **Salvar no computador** e **Abrir** (e o risco de não achar o trabalho em outro computador ou navegador), **Imprimir ou PDF** e o **Tire sua dúvida**. Mudou a tela, um botão, o jeito de salvar, ligar ou imprimir? Atualize o curso na mesma tarefa (regra do Paulo, 23/10/2026, no CLAUDE.md da raiz): o texto e as perguntas, e as imagens com `npm run integracao:capturar-fluxograma` na pasta do Guia (as imagens saem do site publicado, em janela de computador; publique antes de refazê-las); depois `npm test` no Guia.
+
 ## Publicação
 
 **No ar em `https://fluxograma.guiaaps.com.br`** desde 30/09/2026, no GitHub Pages com domínio
