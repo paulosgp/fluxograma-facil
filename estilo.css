@@ -43,7 +43,7 @@ button { font: inherit; color: inherit; }
 .marca { height: 28px; } /* a altura de antes: o texto de 2 linhas sobra para os lados, sem empurrar */
 .marca-texto { display: flex; flex-direction: column; justify-content: center; }
 .marca-texto > span { line-height: 22px; }
-.status { min-height: 16px; font-size: 14px; line-height: 16px; color: var(--ok); white-space: nowrap; }
+.status { align-self: flex-start; min-height: 16px; font-size: 14px; line-height: 16px; color: var(--ok); white-space: nowrap; }
 /* A falha de guardar é rara e tem de ser vista: esta sim pode quebrar linha e crescer. */
 .status.ruim { color: var(--perigo); white-space: normal; max-width: 300px; line-height: 1.25; }
 
