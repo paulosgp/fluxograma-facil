@@ -393,7 +393,8 @@ export const BASE = [
     passos: [
       'Enquanto você trabalha, o sistema já guarda tudo sozinho neste computador.',
       'Para ter um arquivo (e levar para outro computador), clique em "Salvar no computador".',
-      'O arquivo vai para a pasta Downloads, com o nome "Fluxograma - ...".',
+      'Se abrir uma janela, escolha a pasta, confira o nome (já vem "Fluxograma - ...") e clique em Salvar.',
+      'Se não abrir janela nenhuma, o arquivo vai direto para a pasta Downloads, com o nome "Fluxograma - ...".',
     ],
     mostrar: '#bt-salvar',
     comum: true,
@@ -405,7 +406,7 @@ export const BASE = [
       'achar o arquivo', 'acho o arquivo', 'nao acho o arquivo', 'cade o arquivo', 'procurar o arquivo', 'onde fica o arquivo', 'onde esta o arquivo', 'arquivo salvo', 'arquivo json'],
     passos: [
       'Clique em Abrir, no alto da tela.',
-      'Escolha o arquivo. Ele costuma estar na pasta Downloads, com o nome "Fluxograma - ...".',
+      'Escolha o arquivo, na pasta em que você o salvou (se não escolheu, costuma ser a pasta Downloads). O nome começa com "Fluxograma - ...".',
       'Também dá para arrastar o arquivo para dentro da página.',
     ],
     mostrar: '#bt-abrir',

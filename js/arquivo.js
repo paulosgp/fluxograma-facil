@@ -104,6 +104,36 @@ export function baixarArquivo(doc) {
   return a.download;
 }
 
+// Salvar no computador. Onde o navegador sabe abrir a janela de salvar (Chrome e
+// Edge: showSaveFilePicker), pergunta o nome e a pasta, já com o nome sugerido;
+// nos outros, baixa como antes. Devolve { ok, nome, janela } ou { cancelado }:
+// cancelar a janela não é erro, e nada é escrito. Qualquer outra falha da janela
+// (ex.: bloqueada pelo navegador) cai no download, que não deixa a pessoa sem arquivo.
+export async function salvarArquivo(doc, { janela = globalThis, baixar = baixarArquivo } = {}) {
+  if (typeof janela.showSaveFilePicker === 'function') {
+    let alca;
+    try {
+      alca = await janela.showSaveFilePicker({
+        suggestedName: nomeDoArquivo(doc.titulo.texto),
+        types: [{ description: 'Fluxograma Fácil (.json)', accept: { 'application/json': ['.json'] } }],
+      });
+    } catch (erro) {
+      if (erro && erro.name === 'AbortError') return { cancelado: true };
+      alca = null;
+    }
+    if (alca) {
+      const gravador = await alca.createWritable();
+      try {
+        await gravador.write(serializar(doc));
+      } finally {
+        await gravador.close();
+      }
+      return { ok: true, nome: alca.name, janela: true };
+    }
+  }
+  return { ok: true, nome: baixar(doc), janela: false };
+}
+
 export async function lerArquivo(arquivo) {
   if (!arquivo || arquivo.size > 5_000_000) return { ok: false, erro: INVALIDO };
   try {

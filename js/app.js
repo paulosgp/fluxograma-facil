@@ -6,7 +6,7 @@ import { criarInteracao } from './interacao.js';
 import { criarPainel } from './painel.js';
 import { modeloDengue, folhaVazia } from './modelos.js';
 import { definirOrientacao } from './modelo.js';
-import { guardarNoNavegador, lerDoNavegador, baixarArquivo, lerArquivo } from './arquivo.js';
+import { guardarNoNavegador, lerDoNavegador, salvarArquivo as salvarEmArquivo, lerArquivo } from './arquivo.js';
 import { criarDuvidas } from './duvidas-tela.js';
 import { htmlCreditos } from './creditos.js';
 import { avisarAcesso } from './acesso.js';
@@ -96,9 +96,9 @@ painel = criarPainel({ loja, el: $('painel'), interacao, avisar });
 
 // ---------- Guardado automático ----------
 let relogioGuardar = null;
-// "✓ Guardado" curto de propósito: com a frase inteira, a barra do alto quebrava em
-// duas linhas num notebook de 1366 px e roubava altura da folha. A frase inteira
-// fica no title (aparece ao passar o mouse).
+// "✓ Guardado" curto de propósito, e fica embaixo do nome do sistema, num espaço de
+// altura reservada (estilo.css, .marca-texto): quando aparece, a barra do alto não
+// muda de altura e a folha não desce. A frase inteira fica no title.
 function marcarGuardado() {
   const s = $('status');
   s.classList.remove('ruim');
@@ -140,14 +140,29 @@ async function perguntarAntesDeTrocar() {
       { rotulo: 'Salvar e continuar', valor: 'salvar', destaque: true },
     ],
   });
-  if (r === 'salvar') salvarArquivo();
+  if (r === 'salvar') {
+    // Se a pessoa desistiu da janela de salvar, o trabalho atual fica como está.
+    const s = await salvarArquivo();
+    if (!s.ok) return 'cancelar';
+  }
   return r;
 }
 
-function salvarArquivo() {
+// Devolve { ok: true } se o arquivo foi salvo, ou { ok: false } se a pessoa cancelou
+// a janela de salvar (sem aviso nenhum: ela mesma desistiu).
+async function salvarArquivo() {
   interacao.terminarEdicao();
-  const nome = baixarArquivo(loja.doc);
-  avisar(`Arquivo salvo na pasta Downloads com o nome "${nome}". Para continuar depois, use o botão Abrir.`);
+  try {
+    const r = await salvarEmArquivo(loja.doc);
+    if (r.cancelado) return { ok: false };
+    avisar(r.janela
+      ? `Arquivo salvo com o nome "${r.nome}". Para continuar depois, use o botão Abrir.`
+      : `Arquivo salvo na pasta Downloads com o nome "${r.nome}". Para continuar depois, use o botão Abrir.`);
+    return { ok: true };
+  } catch {
+    avisar('Não deu para salvar o arquivo. Tente de novo.');
+    return { ok: false };
+  }
 }
 
 async function abrirArquivo(arquivo) {

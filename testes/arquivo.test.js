@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validarDocumento, lerJson, serializar, nomeDoArquivo } from '../js/arquivo.js';
-import { modeloDengue } from '../js/modelos.js';
+import { validarDocumento, lerJson, serializar, nomeDoArquivo, salvarArquivo } from '../js/arquivo.js';
+import { modeloDengue, folhaVazia } from '../js/modelos.js';
 
 const INVALIDO = 'Este arquivo não é de um fluxograma feito aqui.';
 
@@ -52,4 +52,39 @@ test('nome do arquivo: sem caracteres proibidos no Windows, até 60 letras', () 
   assert.equal(nomeDoArquivo('Fluxo: dengue/2026?'), 'Fluxograma - Fluxo dengue2026.json');
   assert.equal(nomeDoArquivo('   '), 'Fluxograma.json');
   assert.equal(nomeDoArquivo('x'.repeat(100)), `Fluxograma - ${'x'.repeat(60)}.json`);
+});
+
+// ---- Salvar no computador: janela de salvar quando o navegador tem, download quando não ----
+
+const docDeTeste = () => ({ ...folhaVazia(), titulo: { ...folhaVazia().titulo, texto: 'Fluxo de teste' } });
+
+test('salvar: com a janela do navegador, sugere o nome e o tipo e grava o arquivo escolhido', async () => {
+  const doc = docDeTeste();
+  let pedido = null; let gravado = ''; let fechou = false;
+  const janela = {
+    showSaveFilePicker: async (opcoes) => {
+      pedido = opcoes;
+      return { name: 'meu.json', createWritable: async () => ({ write: async (t) => { gravado = t; }, close: async () => { fechou = true; } }) };
+    },
+  };
+  const r = await salvarArquivo(doc, { janela, baixar: () => assert.fail('não era para baixar') });
+  assert.deepEqual(r, { ok: true, nome: 'meu.json', janela: true });
+  assert.equal(pedido.suggestedName, 'Fluxograma - Fluxo de teste.json');
+  assert.deepEqual(pedido.types[0].accept, { 'application/json': ['.json'] });
+  assert.equal(gravado, serializar(doc));
+  assert.ok(fechou);
+});
+
+test('salvar: cancelar a janela não grava, não baixa e não é erro', async () => {
+  const janela = { showSaveFilePicker: async () => { throw new DOMException('cancelado', 'AbortError'); } };
+  const r = await salvarArquivo(docDeTeste(), { janela, baixar: () => assert.fail('não era para baixar') });
+  assert.deepEqual(r, { cancelado: true });
+});
+
+test('salvar: navegador sem a janela (ou que a bloqueia) baixa como antes', async () => {
+  const sem = await salvarArquivo(docDeTeste(), { janela: {}, baixar: () => 'Fluxograma - Fluxo de teste.json' });
+  assert.deepEqual(sem, { ok: true, nome: 'Fluxograma - Fluxo de teste.json', janela: false });
+  const bloqueada = { showSaveFilePicker: async () => { throw new DOMException('bloqueada', 'SecurityError'); } };
+  const r = await salvarArquivo(docDeTeste(), { janela: bloqueada, baixar: () => 'x.json' });
+  assert.deepEqual(r, { ok: true, nome: 'x.json', janela: false });
 });

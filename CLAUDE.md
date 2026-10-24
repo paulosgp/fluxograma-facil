@@ -71,7 +71,7 @@ js/modelo.js      o documento e as operações — cada uma devolve um documento
 js/historico.js   pilhas de desfazer/refazer (fotos JSON)
 js/loja.js        documento + seleção + lotes de desfazer; avisa quem desenha
 js/modelos.js     o modelo em branco (15 formas, 11 setas) e a folha vazia
-js/arquivo.js     validar/consertar arquivo, nome do arquivo, guardar, baixar, abrir
+js/arquivo.js     validar/consertar arquivo, nome do arquivo, guardar, salvar (janela ou download), abrir
 js/desenho.js     desenha na folha (só reflete, não decide)
 js/interacao.js   mouse e teclado: escrever, mover, alças, laço, "+", modo seta
 js/painel.js      painel da direita
@@ -81,7 +81,7 @@ js/duvidas-tela.js a janela do "Tire sua dúvida"
 js/creditos.js    a marca do autor (fonte única)
 js/acesso.js      contagem anônima de acessos, uma vez por sessão — ver a seção própria
 js/app.js         liga tudo: barra, tela inicial, diálogos, guardado automático, impressão
-testes/           node --test  (175 testes, só dos módulos puros)
+testes/           node --test  (178 testes, só dos módulos puros)
 servir.js         servidor da prévia: node servir.js → http://localhost:5180
 fontes/           Archivo e Source Sans 3, copiadas do Guia Saúde
 ```
@@ -146,8 +146,17 @@ raiz). Módulos ES não carregam com o `index.html` aberto direto do disco, e po
   virou a resposta "Como usar o sistema, do começo ao fim?".
 - **Nada é guardado enquanto a tela inicial está aberta.** O `beforeunload` guarda ao sair. Sem essa
   trava, quem recarregava ainda na tela inicial gravava a folha vazia e nunca mais via a tela inicial.
-- **O aviso da barra é só "✓ Guardado".** A frase inteira fica no `title`. Com "Guardado neste
-  computador", a barra quebrava em duas linhas num notebook de 1366 px e roubava altura da folha.
+- **O aviso da barra é só "✓ Guardado", e mora embaixo do nome do sistema** (24/10/2026). A frase inteira
+  fica no `title`. Antes ele era um item à direita da barra, e ao aparecer empurrava a barra de uma para duas
+  linhas (a folha descia ~40 px; visto em 1280 px, 1100 px e 900 px). Agora a barra tem a altura reservada
+  (`.marca-texto` e `.marca { height: 28px }` em `estilo.css`) e nada se mexe quando ele aparece. A falha de
+  guardar (`.status.ruim`) pode quebrar linha de propósito: é rara e tem de ser vista.
+- **"Salvar no computador" abre a janela de salvar onde o navegador sabe** (`showSaveFilePicker`: Chrome e
+  Edge; 24/10/2026): a pessoa escolhe pasta e nome (sugestão "Fluxograma - <título>.json"). Cancelar a janela
+  não faz nada, nem aviso (e, em "Salvar e continuar" antes de trocar de fluxograma, mantém o trabalho atual).
+  Onde não há a janela (Firefox, Safari) ou ela é bloqueada, baixa para a pasta Downloads como antes. O formato
+  do arquivo e o "Abrir" não mudaram. Quem testa: o Playwright não dirige a janela nativa; troque
+  `window.showSaveFilePicker` por um falso na página (`testes/arquivo.test.js` cobre o módulo).
 
 ## Tire sua dúvida (29/09/2026)
 

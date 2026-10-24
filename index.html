@@ -16,7 +16,10 @@
 <header class="barra">
   <div class="marca">
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1a5fb4"/><path d="M16 5l7 7-7 7-7-7z" fill="#fff"/><path d="M16 19v6m-3-3 3 3 3-3" stroke="#fff" stroke-width="2" fill="none"/></svg>
-    <span>Fluxograma Fácil</span>
+    <div class="marca-texto">
+      <span>Fluxograma Fácil</span>
+      <div id="status" class="status" role="status"></div>
+    </div>
   </div>
   <div class="barra-botoes">
     <button id="bt-desfazer" class="bt" title="Desfazer (Ctrl+Z)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button>
@@ -29,7 +32,6 @@
     <button id="bt-novo" class="bt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM12 11v6m-3-3h6"/></svg>Começar outro</button>
     <button id="bt-duvida" class="bt bt-duvida"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.2a2 2 0 1 1 2.8 1.8c-.5.2-.8.6-.8 1.2M12 14h.01"/></svg>Tire sua dúvida</button>
   </div>
-  <div id="status" class="status" role="status"></div>
   <input type="file" id="entrada-arquivo" accept=".json,application/json" hidden>
 </header>
 
